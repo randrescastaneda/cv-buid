@@ -88,6 +88,8 @@ def text(value):
 
 def quarto(profile, selection, style="plain", review_candidates=False):
     rows = select(profile, selection, review_candidates)
+    if style == "classic":
+        return classic_quarto(profile, selection, rows)
     person = profile["person"]
     # Generated source contains no code cells and never executes imported CVs.
     metadata = ["---",
@@ -141,6 +143,98 @@ def quarto(profile, selection, style="plain", review_candidates=False):
                 out += ["```{=latex}", "\\end{minipage}\\par\\smallskip", "```", ""]
         for note in section.get("review_notes", []):
             out += ["**Review required:** " + text(note), ""]
+    return "\n".join(out)
+
+
+def classic_quarto(profile, selection, rows):
+    """Delegate a compact serif CV to Quarto, with grouped career entries."""
+    out = ["---", "execute:", "  enabled: false", "format:", "  pdf:",
+           "    pdf-engine: pdflatex", "    documentclass: article",
+           '    fontsize: "11pt"', "    papersize: letter",
+           '    geometry: "left=0.75in,right=0.75in,top=0.6in,bottom=0.6in"',
+           "    latex-auto-install: false", "    keep-tex: true", "    toc: false",
+           "    colorlinks: true", '    linkcolor: "blue"', '    urlcolor: "blue"',
+           "include-in-header:", "  text: |",
+           r"    \usepackage{titlesec,enumitem,needspace,array}",
+           r"    \titleformat{\section}{\normalfont\normalsize\bfseries}{}{0pt}{\MakeUppercase}[\titlerule]",
+           r"    \titlespacing*{\section}{0pt}{1em}{0.4em}",
+           r"    \setlength{\parindent}{0pt}", r"    \setlength{\parskip}{0.25em}",
+           r"    \setlist[itemize]{leftmargin=1.6em,topsep=0.15em,itemsep=0pt,parsep=0pt}",
+           r"    \pagestyle{empty}", "---", ""]
+
+    def raw(value):
+        out.extend(["```{=latex}", value, "```", ""])
+
+    person = profile["person"]
+    raw(r"\begin{center}{\fontsize{20.66}{24}\selectfont\bfseries")
+    out.extend([text(person["name"].upper()), ""])
+    raw(r"\par}\vspace{0.2em}{\small")
+    contact = [text(person[k]) for k in selection.get("contact_fields", []) if person.get(k)]
+    out.extend([" | ".join(contact), ""])
+    raw(r"\par}{\footnotesize")
+    out.extend(["Draft for review | " + text(profile.get("as_of", "")), ""])
+    raw(r"\par}\end{center}\vspace{-0.5em}")
+    for section, entries in rows:
+        if section.get("page_break_before"):
+            out.extend(["{{< pagebreak >}}", ""])
+        out.extend(["# " + text(section["title"]), ""])
+        raw(r"\begin{list}{}{\setlength{\leftmargin}{1.5em}\setlength{\rightmargin}{0pt}\setlength{\topsep}{0pt}}\item\relax")
+        last_group = None
+        for entry_id, fields in entries:
+            kind = profile["entries"][entry_id]["kind"]
+            organization = fields.get("organization", "")
+            career = kind in {"experience", "education"}
+            if career:
+                if kind == "education":
+                    group, _, detail = organization.partition(",")
+                else:
+                    group, _, detail = organization.partition("|")
+                group, detail = group.strip(), detail.strip()
+                group_key = (group, detail) if kind == "education" else (group,)
+                if group_key != last_group:
+                    raw(r"\needspace{5\baselineskip}")
+                    heading = "**" + text(group) + "**" if group else ""
+                    if kind == "education" and detail:
+                        heading += r" `\hfill`{=latex} " + text(detail)
+                    out.extend([heading, ""])
+                    last_group = group_key
+            else:
+                last_group = None
+            raw(r"\noindent\begin{minipage}{\linewidth}")
+            title = text(fields.get("title", ""))
+            date = text(fields.get("when", ""))
+            if career:
+                raw(r"\begin{tabular*}{\linewidth}{@{\hspace{1em}}p{0.73\linewidth}@{\extracolsep{\fill}}>{\raggedleft\arraybackslash}p{0.23\linewidth}@{}}")
+                line = "*" + title + "*"
+                if kind == "experience" and detail:
+                    line += " - " + text(detail)
+                out.extend([line + r" `&`{=latex} " + date + r" `\\`{=latex}", ""])
+                raw(r"\end{tabular*}")
+                if fields.get("description"):
+                    out.extend([text(fields["description"]), ""])
+            else:
+                line = title
+                if organization:
+                    line += ". " + text(organization)
+                if date:
+                    line += " (" + date + ")"
+                if line:
+                    line += "."
+                if fields.get("description"):
+                    line += " " + text(fields["description"])
+                if fields.get("url"):
+                    line += " " + linked_title({"title": "link", "url": fields["url"]})
+                out.extend([line.strip(), ""])
+            for bullet in fields.get("highlights", []):
+                out.append("- " + text(bullet))
+            if fields.get("highlights"):
+                out.append("")
+            if career and fields.get("url"):
+                out.extend([linked_title({"title": "link", "url": fields["url"]}), ""])
+            raw(r"\end{minipage}\par\smallskip")
+        for note in section.get("review_notes", []):
+            out.extend(["**Review required:** " + text(note), ""])
+        raw(r"\end{list}")
     return "\n".join(out)
 
 
@@ -221,7 +315,7 @@ def main(argv=None):
     p = sub.add_parser("validate"); p.add_argument("profile")
     p = sub.add_parser("questions"); p.add_argument("profile")
     p = sub.add_parser("diff"); p.add_argument("before"); p.add_argument("after")
-    p = sub.add_parser("quarto"); p.add_argument("profile"); p.add_argument("selection"); p.add_argument("--out", required=True); p.add_argument("--style", choices=["plain", "hyndman"], default="plain"); p.add_argument("--review-candidates", action="store_true", help="Include proposed entries with visible owner-review labels; conflicts remain blocked")
+    p = sub.add_parser("quarto"); p.add_argument("profile"); p.add_argument("selection"); p.add_argument("--out", required=True); p.add_argument("--style", choices=["plain", "classic", "hyndman"], default="plain"); p.add_argument("--review-candidates", action="store_true", help="Include proposed entries with visible owner-review labels; conflicts remain blocked")
     p = sub.add_parser("public-export"); p.add_argument("profile"); p.add_argument("policy"); p.add_argument("--out", required=True)
     args = parser.parse_args(argv)
     try:

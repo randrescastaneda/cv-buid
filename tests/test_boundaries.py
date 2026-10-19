@@ -69,6 +69,33 @@ class Boundaries(unittest.TestCase):
         with self.assertRaises(ValueError):
             quarto(self.profile, selection, review_candidates=True)
 
+    def test_classic_groups_career_entries_and_preserves_dates(self):
+        self.profile["entries"]["research-role"]["fields"]["organization"] = "Example Institute | Research"
+        previous = copy.deepcopy(self.profile["entries"]["research-role"])
+        previous["fields"].update(title="Assistant", when="2018 - 2020")
+        self.profile["entries"]["previous-role"] = previous
+        selection = {"sections": [{"title": "Work Experience", "entry_ids": ["research-role", "previous-role"]}]}
+        output = quarto(self.profile, selection, style="classic")
+        self.assertEqual(output.count("**Example Institute**"), 1)
+        for value in ["Research Analyst", "Assistant", "2018 - 2020", "2020 - 2025"]:
+            self.assertIn(value, output)
+        self.assertIn("enabled: false", output)
+        self.assertIn(r"\MakeUppercase", output)
+
+    def test_classic_keeps_review_and_text_safety_gates(self):
+        entry = self.profile["entries"]["research-role"]
+        entry["status"] = "proposed"
+        entry["fields"]["title"] = "```{python}\nprint('run')\n```"
+        selection = {"sections": [{"title": "Experience", "entry_ids": ["research-role"]}]}
+        with self.assertRaises(ValueError):
+            quarto(self.profile, selection, style="classic")
+        output = quarto(self.profile, selection, style="classic", review_candidates=True)
+        self.assertNotIn("```{python}", output)
+        self.assertIn("owner review pending", output)
+        entry["status"] = "conflict"
+        with self.assertRaises(ValueError):
+            quarto(self.profile, selection, style="classic", review_candidates=True)
+
 
 if __name__ == "__main__":
     unittest.main()

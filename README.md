@@ -14,6 +14,8 @@ cv-buid questions /private/location/profile.json
 cv-buid diff /private/location/current.json /private/location/candidate.json
 cv-buid quarto examples/profile.json examples/selection.json --out /tmp/cv.qmd
 quarto render /tmp/cv.qmd --to pdf --no-execute
+cv-buid quarto examples/profile.json examples/selection.json --style classic --out /tmp/classic-cv.qmd
+quarto render /tmp/classic-cv.qmd --to pdf --no-execute
 cv-buid public-export examples/profile.json examples/public-allowlist.json --out /tmp/public-profile.json
 ```
 
@@ -45,7 +47,11 @@ an explicit public flag and corroborated or confirmed status. Keep policies
 empty until the owner reviews their contents. Export is staging only; the
 website adapter and publication step are intentionally separate.
 
-The plain adapter delegates typography to Quarto. The `hyndman` adapter emits
+The plain adapter delegates typography to Quarto. The `classic` adapter uses
+Quarto's standard PDF pipeline with compact serif typography, a centered name,
+uppercase section rules, and grouped employers or institutions with dates on
+the right. It contains no personal data or copied third-party CV class.
+The `hyndman` adapter emits
 the shared Quarto Vitae entry syntax; install its extension separately.
 Do not assume MIT covers templates: Quarto Vitae Hyndman is CC BY-SA 4.0,
 and other templates have their own terms. No template is bundled in this
