@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-01-01",
+  "person": {
+    "name": "Alex Example",
+    "email": "alex@example.invalid",
+    "website": "https://example.invalid"
+  },
+  "sources": {
+    "user-cv": {
+      "type": "user-supplied",
+      "filename": "example.txt"
+    }
+  },
+  "entries": {
+    "research-role": {
+      "kind": "experience",
+      "status": "confirmed",
+      "public": true,
+      "fields": {
+        "title": "Research Analyst",
+        "organization": "Example Institute",
+        "when": "2020 - 2025",
+        "description": "Built reproducible workflows for survey analysis."
+      },
+      "evidence": [
+        {
+          "source_id": "user-cv",
+          "locator": "Experience"
+        }
+      ],
+      "notes": "Private interview context must never be exported."
+    }
+  },
+  "review_questions": []
+}

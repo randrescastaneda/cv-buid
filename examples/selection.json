@@ -1,0 +1,14 @@
+{
+  "sections": [
+    {
+      "title": "Experience",
+      "entry_ids": [
+        "research-role"
+      ]
+    }
+  ],
+  "contact_fields": [
+    "email",
+    "website"
+  ]
+}
