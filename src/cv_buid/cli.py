@@ -9,6 +9,7 @@ import json
 import re
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 STATUSES = {"imported", "corroborated", "confirmed", "conflict", "proposed"}
@@ -329,6 +330,10 @@ def main(argv=None):
     p = sub.add_parser("docx", help="Export editable paragraphs with a separate style policy")
     p.add_argument("profile"); p.add_argument("selection"); p.add_argument("--out", required=True)
     p.add_argument("--style", help="JSON style policy; defaults to the professional sans-serif style")
+    p = sub.add_parser("init-quarto", help="Seed editable QMD and output-specific references once")
+    p.add_argument("profile"); p.add_argument("selection"); p.add_argument("--directory", required=True); p.add_argument("--name", required=True)
+    p = sub.add_parser("render", help="Render authoritative QMD without regenerating its content")
+    p.add_argument("source"); p.add_argument("--to", choices=["pdf", "docx"], default="pdf"); p.add_argument("--profile")
     args = parser.parse_args(argv)
     try:
         if args.command == "inspect":
@@ -340,12 +345,21 @@ def main(argv=None):
         elif args.command == "diff":
             print("".join(difflib.unified_diff(canonical(load(args.before)), canonical(load(args.after)), fromfile=args.before, tofile=args.after)), end="")
         elif args.command == "quarto":
+            if Path(args.out).exists():
+                raise ValueError("Output QMD exists; edit it directly or choose a new draft path")
             write(args.out, quarto(load(args.profile), load(args.selection), args.style, args.review_candidates))
         elif args.command == "public-export":
             write(args.out, json.dumps(public_export(load(args.profile), load(args.policy)), ensure_ascii=False, indent=2) + "\n")
         elif args.command == "docx":
+            print("Legacy JSON-to-Word exporter. Prefer authoritative QMD and cv-buid render --to docx.", file=sys.stderr)
             from .word import export_docx
             export_docx(load(args.profile), load(args.selection), args.out, load(args.style) if args.style else None)
+        elif args.command == "init-quarto":
+            from .quarto_project import init_project
+            print(init_project(load(args.profile), load(args.selection), args.directory, args.name))
+        elif args.command == "render":
+            from .quarto_project import render_source
+            render_source(args.source, args.to, args.profile)
     except (ValueError, KeyError, TypeError, OSError, ImportError, subprocess.CalledProcessError) as exc:
         parser.exit(2, f"cv-buid: {exc}\n")
 

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cv-buid"
-version = "0.2.0"
+version = "0.3.0"
 description = "Local evidence-backed CV profiles, review diffs, and Quarto exports"
 requires-python = ">=3.11"
 license = "MIT"
@@ -19,3 +19,6 @@ cv-buid = "cv_buid.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+cv_buid = ["assets/quarto/*"]

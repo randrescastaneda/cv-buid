@@ -26,11 +26,16 @@ Use concrete verbs and explain technical work in ordinary professional language.
 Keep official titles and publication titles accurate. Do not manufacture metrics,
 results or causal links to improve a sentence or balance bullet lengths.
 
-Keep stable entries and evidence in one private canonical profile. Selections
-choose IDs and section order. `field_overrides` may shorten display fields for
-a variant, but they do not resolve source conflicts or approve facts. Review
-overrides against the same evidence. Keep the selection independent of a style
-file so either variant can use any compatible renderer.
+Keep stable factual entries and evidence in one private career profile. Keep
+reviewed variant wording, inclusion and order in separate authoritative QMD
+files. These authorities have different jobs: the profile supports the claims;
+QMD controls what each document says. Use stable entry IDs to link them.
+
+JSON selections and display overrides may seed the first QMD draft, but they
+are not ongoing render inputs. After review, edit QMD directly. A new fact
+updates evidence/profile and the affected QMD after review; a wording-only edit
+need not rewrite the fuller career record. Refreshes propose diffs and must not
+overwrite edited QMD. Styles and generated DOCX/PDF do not own narrative content.
 
 For a short resume, select before shrinking. Omit a generic profile if it adds
 little. Preserve the relative order of retained sections from the owner's brief.
@@ -39,7 +44,8 @@ Keep the full chronology and details in the longer CV. List meaningful omissions
 in a review note instead of silently deleting them from the canonical record.
 
 Place sustained leadership prominently once when it spans several roles.
-Describe distinct regional results together rather than repeating them under
+Use supported activities and project examples rather than repeating the role
+list already shown in the chronology. Describe distinct regional results together rather than repeating them under
 every job. Keep dates, headcounts and budget ranges attached to their actual
 scope. Do not assign undated responsibilities to a particular appointment.
 

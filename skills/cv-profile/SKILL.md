@@ -5,8 +5,8 @@ description: Maintain evidence-backed private career profiles and route CV or re
 
 ## Outcome
 
-Produce reviewable career documents from one private profile. Content variants
-and visual styles are separate inputs. Done means requested documents exist,
+Maintain career evidence in one private profile and reviewed variant prose in
+authoritative QMD files. QMD content and format-specific presentation are separate inputs. Done means requested documents exist,
 their facts reconcile with evidence, and every final rendered page was checked.
 
 ## Inputs and routing
@@ -57,16 +57,22 @@ For refreshes, write a candidate profile separately and show
 replacing canonical facts. Select entries for opportunities; tailor wording
 within the supported evidence rather than expanding the claims.
 
-For editable Word, use `cv-buid docx PROFILE SELECTION --style STYLE.json --out CV.docx`.
-It uses ordinary paragraphs and right date tabs. PDF conversion is external;
-use a supported local document renderer and inspect the actual DOCX render.
-For Quarto, run `cv-buid validate PROFILE`, then
-`cv-buid quarto PROFILE SELECTION --out PRIVATE/cv.qmd`.
-Render with `quarto render PRIVATE/cv.qmd --to pdf --no-execute`.
-`--style hyndman` requires the separately licensed Quarto Vitae extension.
-Compare extracted PDF text with selected entries and inspect every rendered
-page for clipping, glyph errors, and awkward page breaks. Do not promise ATS
-compatibility from appearance alone.
+For a new draft, seed once with
+`cv-buid init-quarto PROFILE SELECTION --directory PROJECT --name resume`.
+The initializer refuses to overwrite QMD or customized presentation files.
+After the first reviewed draft, edit QMD directly. Profile refreshes propose
+changes to QMD; rendering never regenerates reviewed prose from old JSON.
+
+Render the authoritative source with `cv-buid render PROJECT/resume.qmd --to pdf`.
+PDF is primary. Optional Word is `--to docx` from that same QMD, using its
+`reference-doc`. PDF uses its own LaTeX configuration/header/filter. A Word
+reference does not style PDF and does not guarantee identical pagination.
+The optional `--profile mac` locates installed Microsoft Word Calibri fonts on
+macOS. No fonts are bundled. Verify the actual documented Quarto pipeline.
+
+The old `quarto` snapshot exporter and `docx` JSON-to-Word command remain for
+history/backward compatibility; they are not the QMD-first workflow. Do not edit
+derived DOCX/PDF as a competing source. Bring any desired output edits into QMD.
 
 The website is a destination for an explicit reviewed subset. Default to an
 empty public policy. `cv-buid public-export PROFILE POLICY --out STAGING.json`

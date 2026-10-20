@@ -7,14 +7,16 @@ description: Verify final CV and resume documents against selected facts and the
 
 Deliver the requested documents with trustworthy claims and readable pages.
 Done means the final editable files and PDFs reconcile with their selections,
-all pages have been visually inspected, and the delivered bytes are verified.
+all pages have been visually inspected, the documented Quarto pipeline has run,
+and the delivered bytes are verified.
 
 ## Inputs
 
-Use the final canonical profile, each content selection, the style policy,
-source evidence and selection note. Preserve earlier versions. Do not validate
-an old PDF after changing its DOCX or substitute a different renderer's output
-for the actual editable document's pages without disclosing that limitation.
+Use the career evidence profile, authoritative QMD variants, format-specific
+configuration/templates/reference files and selection note. Preserve earlier
+versions. Confirm that rendering reads existing QMD and does not regenerate it
+from stale JSON. Do not validate a parallel renderer in place of the documented
+Quarto pipeline, or treat independently edited Word content as authoritative.
 
 ## Workflow
 
@@ -25,12 +27,14 @@ for the actual editable document's pages without disclosing that limitation.
    consistent indents, proper right date tabs, readable sizes, resolved font,
    working links, and no layout tables, text boxes, columns or graphics in the
    professional preset. Verify no italics are applied or inherited.
-3. Render the actual DOCX to PDF and page images with the available supported
-   document workflow. Inspect every page for clipping, overlap, missing glyphs,
+3. Run the documented Quarto command on each final QMD and rasterize its
+   primary PDF. If optional DOCX is retained, derive it from the same QMD and
+   render it separately for QA. Inspect every page for clipping, overlap, missing glyphs,
    orphan headings, awkward breaks, date alignment and balanced whitespace.
    Re-render after changes. Confirm a requested one-page resume is one page.
-4. Extract PDF text and compare all selected fields and bullets, including
-   variant overrides. Check the DOCX XML and hyperlink relationships as well.
+4. Extract PDF text and compare the approved QMD content, bullets and links
+   against both the output and career evidence. Initial migrations also reconcile
+   all previously reviewed fields. Check optional DOCX XML/links if delivered.
    Verify published/accepted distinctions and internal notes staying outside
    outward files. Do not claim universal ATS certification.
 5. Run relevant package and skill checks. Keep personal data out of generic
@@ -42,7 +46,8 @@ for the actual editable document's pages without disclosing that limitation.
 
 ## Delivery
 
-Provide the resume and full CV as separate requested file pairs, a concise
+Provide primary PDFs with QMD/configuration/reference-file links, optional
+Word only if derived and verified, and a concise
 description of the revision, selection notes and material limitations. State a
 font fallback or remaining blocker clearly. Keep QA screenshots internal unless
 the user asked for them. Drafting does not itself authorize external messages,

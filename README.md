@@ -1,93 +1,85 @@
 # cv-buid
 
-An offline Python package and agent workflow for evidence-backed CV profiles.
-This is a bounded first scaffold, not an autonomous fact collector.
+A small local toolkit for evidence-backed career records and QMD-first CVs.
+Python 3.11+ is required. JSON operations have no runtime dependency. Install with
+`python3 -m pip install .`; YAML is optional with `.[yaml]`. Quarto and a TeX
+installation provide primary PDF rendering. Font and office binaries are not
+bundled. The optional `word` extra is needed only for legacy Word export or
+rebuilding the default Word reference, not ordinary Quarto rendering.
 
-Install locally with `python3 -m pip install .`. Python 3.11+ is required;
-JSON needs no runtime dependencies. YAML is optional with `pip install .[yaml]`.
-Editable Word output is optional: `pip install .[word]`.
-Quarto, LaTeX, a DOCX-to-PDF converter, and `pdftotext` are external tools,
-used only by the selected workflow.
+## Source ownership
+
+- One private profile holds career facts, source evidence and review status.
+- Independent QMD files own the resume and full CV wording, inclusion and order.
+- `_quarto.yml` and output-specific presentation files own visual style.
+- PDFs and optional DOCX files are derived; never edit them as competing sources.
+
+The profile supports what is true; QMD controls what a particular variant says.
+A new fact updates the evidence and affected QMD after review. A wording-only
+change can stay in QMD. Refreshes propose reviewable diffs instead of regenerating
+edited documents from stale JSON. Keep personal content outside this generic repo.
+
+## Draft once then edit QMD
 
 ```sh
 cv-buid inspect existing.tex --out /private/location/import
 cv-buid validate /private/location/profile.json
-cv-buid questions /private/location/profile.json
-cv-buid diff /private/location/current.json /private/location/candidate.json
-cv-buid quarto examples/profile.json examples/selection.json --out /tmp/cv.qmd
-quarto render /tmp/cv.qmd --to pdf --no-execute
-cv-buid quarto examples/profile.json examples/selection.json --style classic --out /tmp/classic-cv.qmd
-quarto render /tmp/classic-cv.qmd --to pdf --no-execute
-cv-buid public-export examples/profile.json examples/public-allowlist.json --out /tmp/public-profile.json
-cv-buid docx examples/profile.json examples/selection.json --out /tmp/cv.docx
+cv-buid init-quarto examples/profile.json examples/selection.json --directory /tmp/career-project --name resume
+cv-buid render /tmp/career-project/resume.qmd --to pdf
+cv-buid render /tmp/career-project/resume.qmd --to docx
 ```
 
-The [profile router](skills/cv-profile/SKILL.md) selects the standardized
+`init-quarto` uses a reviewed JSON selection as a migration seed. It refuses to
+overwrite a QMD and preserves existing presentation files. After seeding, edit
+QMD directly. It is not regenerated during render. Create a separate QMD with a
+separate selection for a longer CV; the variant is independent of style.
+
+The project contains semantic QMD, shared/per-format YAML, a PDF LaTeX header,
+a small presentation filter and a content-free Word reference. PDF is primary.
+The reference DOCX supplies Word styles and page properties; it does not style
+PDF. Both outputs use the same QMD content, without an identical-pagination
+promise. Bring any desired Word edits back into QMD before rendering again.
+
+The professional preset uses Calibri, 11 pt body and no italics. Dates use a
+right-aligned guide for employment and education. Contacts stay in body text.
+The optional `--profile mac` finds Calibri in a standard Microsoft Word Mac
+installation. Otherwise use installed fonts or explicitly configure an approved
+sans-serif fallback. Check embedded fonts and every final page.
+
+The default reference can be created at a new path with
+`python scripts/create_word_reference.py NEW_REFERENCE.docx`. The command
+requires python-docx and refuses an overwrite. Customize the resulting reference
+directly for Word; customize the PDF header/YAML independently.
+
+## Agent routing
+
+The [profile router](skills/cv-profile/SKILL.md) selects standardized
 [content](skills/cv-content/SKILL.md), [layout](skills/cv-layout/SKILL.md) and
-[verification](skills/cv-qa/SKILL.md) skills. Repository discovery uses
-`.agents/skills` links; each skill explicitly permits implicit invocation.
-To install the workflow elsewhere, copy all four folders from `skills/` into
-the target agent's skill directory. The CLI is installed through pip; installing
-it does not change global agent configuration.
+[verification](skills/cv-qa/SKILL.md) skills. `.agents/skills` links support
+repository discovery with implicit invocation enabled. Copy all four skill
+folders together when installing the agent workflow elsewhere. Pip installation
+does not change global agent configuration.
 
-`person`, ID-indexed `sources`, and ID-indexed `entries` live in one private
-canonical JSON or YAML file. Entries include `kind`, `fields`, `status`,
-`evidence`, and optional `public`. Evidence names a source and a locator.
-Selections list IDs in section order, independently of the profile and design.
-Resume and full CV are independent content selections, not styles. Optional
-`field_overrides` on a selection shorten only display fields; they never alter
-canonical facts, evidence, statuses or public flags. Reconcile those wordings
-with evidence and record substantial omissions in a separate selection note.
-The same selection can be rendered with different style policies.
-Proposed entries are excluded by default. For an explicitly requested review
-draft, `quarto --review-candidates` labels each proposed entry as awaiting owner
-review without changing its status. Conflicts remain blocked in either mode,
-and the public export rules remain unchanged.
-The schema is deliberately small and currently validated by Python rather than
-a published JSON Schema. Field-level provenance, deduplication across research
-versions, and an interactive interview are follow-up work.
+[Architecture and official documentation](skills/cv-layout/references/quarto-architecture.md)
+explain the output-specific references and source ownership. Run the actual
+Quarto pipeline, reconcile output with QMD and evidence, and inspect every page.
+No universal ATS certification is claimed.
 
-The import command preserves and hashes local bytes but only extracts text.
-An agent performs the semantic import and records missing evidence. Refreshes
-are candidate profiles and deterministic diffs; there is no automatic approval,
-network sync, scheduler, or publication.
+## Evidence and compatibility
 
-Public exports require exact scalar JSON pointers. No object, wildcard,
-source, note, or review-context exports are accepted. A publishable entry needs
-an explicit public flag and corroborated or confirmed status. Keep policies
-empty until the owner reviews their contents. Export is staging only; the
-website adapter and publication step are intentionally separate.
+Entries keep stable IDs, source locators, review status and public flags.
+Conflicts/proposals are excluded from ordinary selections. Sources suggest facts;
+they do not approve impact, leadership or publication. Keep shared authorship and
+ongoing-work qualifications. Imports hash/copy sources without executing LaTeX.
 
-The Word adapter uses ordinary editable paragraphs, body contacts, real bullets
-and right tabs for employment/education dates. Bibliographic dates stay with
-their citations. It has no layout tables, columns, graphics or text boxes.
-Its professional preset uses Calibri, 11 pt body, 18 pt name, uppercase headings,
-black text and no italics. Verify the actual installed/rendered font; explicitly
-choose Arial or another approved sans-serif fallback if necessary.
+`questions`, `diff` and `public-export` support review. Public export uses explicit
+scalar allowlists, requires approved/corroborated entry flags, and never publishes.
+Default to an empty allowlist until reviewed.
 
-An optional JSON file controls appearance without selecting content:
+The older `quarto` snapshot adapters and JSON-to-Word `docx` exporter remain for
+history/backward compatibility. They are not the current authoring pipeline.
+The snapshot CLI refuses to overwrite an existing QMD. Old Quarto Vitae templates
+retain their own licences; the new default uses ordinary Quarto/LaTeX presentation.
 
-```json
-{"font": "Arial", "body_pt": 11, "heading_pt": 11.5, "contact_pt": 9.5}
-```
-
-Pass it with `cv-buid docx PROFILE SELECTION --style STYLE.json --out CV.docx`.
-The exporter rejects tiny body text and italics for this preset. It does not
-convert to PDF or certify ATS behavior. Render the actual DOCX with a supported
-local document workflow, inspect every page, and verify text, links, dates and
-typography. Fonts and office runtimes are not bundled or redistributed.
-
-The plain adapter delegates typography to Quarto. The `classic` adapter uses
-Quarto's standard PDF pipeline with compact serif typography, a centered name,
-uppercase section rules, and grouped employers or institutions with dates on
-the right. It contains no personal data or copied third-party CV class.
-The `hyndman` adapter emits
-the shared Quarto Vitae entry syntax; install its extension separately.
-Do not assume MIT covers templates: Quarto Vitae Hyndman is CC BY-SA 4.0,
-and other templates have their own terms. No template is bundled in this
-package. RenderCV is an alternate YAML/PDF backend with an MIT-licensed CLI
-and an official agent skill; no RenderCV adapter is implemented yet.
-
-Run checks with `PYTHONPATH=src python3 -m unittest discover -s tests -v`.
-All packaged examples and tests use synthetic identities. Keep real data,
-imports, generated CVs, and credentials out of package history.
+Run `PYTHONPATH=src python3 -m unittest discover -s tests -v` for package checks.
+All examples, tests, skills and presentation assets are generic or synthetic.

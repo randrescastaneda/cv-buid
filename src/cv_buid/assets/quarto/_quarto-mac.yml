@@ -1,0 +1,16 @@
+# Optional font-location profile for Microsoft Word's installed Mac fonts.
+# No font files are distributed. Default rendering uses installed family names.
+format:
+  pdf:
+    mainfont: Calibri.ttf
+    sansfont: Calibri.ttf
+    mainfontoptions:
+      - Path=/Applications/Microsoft Word.app/Contents/Resources/DFonts/
+      - BoldFont=Calibrib.ttf
+      - ItalicFont=Calibri.ttf
+      - BoldItalicFont=Calibrib.ttf
+    sansfontoptions:
+      - Path=/Applications/Microsoft Word.app/Contents/Resources/DFonts/
+      - BoldFont=Calibrib.ttf
+      - ItalicFont=Calibri.ttf
+      - BoldItalicFont=Calibrib.ttf
