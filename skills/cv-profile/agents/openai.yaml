@@ -1,0 +1,6 @@
+interface:
+  display_name: "Career Profile"
+  short_description: "Route evidence-backed CV and resume work"
+  default_prompt: "Use $cv-profile for the current CV or resume task."
+policy:
+  allow_implicit_invocation: true

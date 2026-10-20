@@ -1,0 +1,6 @@
+interface:
+  display_name: "CV and Resume Verification"
+  short_description: "Check facts editable files and every rendered page"
+  default_prompt: "Use $cv-qa for the current CV or resume task."
+policy:
+  allow_implicit_invocation: true

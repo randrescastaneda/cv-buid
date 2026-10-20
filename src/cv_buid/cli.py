@@ -73,7 +73,16 @@ def select(profile, selection, review_candidates=False):
             elif entry["status"] not in RENDERABLE:
                 raise ValueError(f"Resolve {entry['status']} before rendering: {entry_id}")
             else:
-                fields = entry["fields"]
+                fields = copy.deepcopy(entry["fields"])
+            overrides = selection.get("field_overrides", {}).get(entry_id, {})
+            allowed = {"title", "organization", "when", "description", "highlights", "url"}
+            if not isinstance(overrides, dict) or set(overrides) - allowed:
+                raise ValueError(f"Only display fields may be overridden: {entry_id}")
+            fields.update(copy.deepcopy(overrides))
+            if entry["status"] == "proposed" and review_candidates:
+                # A display override cannot erase the review warning.
+                if "owner review pending" not in fields.get("title", ""):
+                    fields["title"] = fields.get("title", "") + " [owner review pending]"
             rows.append((entry_id, fields))
         selected.append((section, rows))
     return selected
@@ -317,6 +326,9 @@ def main(argv=None):
     p = sub.add_parser("diff"); p.add_argument("before"); p.add_argument("after")
     p = sub.add_parser("quarto"); p.add_argument("profile"); p.add_argument("selection"); p.add_argument("--out", required=True); p.add_argument("--style", choices=["plain", "classic", "hyndman"], default="plain"); p.add_argument("--review-candidates", action="store_true", help="Include proposed entries with visible owner-review labels; conflicts remain blocked")
     p = sub.add_parser("public-export"); p.add_argument("profile"); p.add_argument("policy"); p.add_argument("--out", required=True)
+    p = sub.add_parser("docx", help="Export editable paragraphs with a separate style policy")
+    p.add_argument("profile"); p.add_argument("selection"); p.add_argument("--out", required=True)
+    p.add_argument("--style", help="JSON style policy; defaults to the professional sans-serif style")
     args = parser.parse_args(argv)
     try:
         if args.command == "inspect":
@@ -331,6 +343,9 @@ def main(argv=None):
             write(args.out, quarto(load(args.profile), load(args.selection), args.style, args.review_candidates))
         elif args.command == "public-export":
             write(args.out, json.dumps(public_export(load(args.profile), load(args.policy)), ensure_ascii=False, indent=2) + "\n")
+        elif args.command == "docx":
+            from .word import export_docx
+            export_docx(load(args.profile), load(args.selection), args.out, load(args.style) if args.style else None)
     except (ValueError, KeyError, TypeError, OSError, ImportError, subprocess.CalledProcessError) as exc:
         parser.exit(2, f"cv-buid: {exc}\n")
 

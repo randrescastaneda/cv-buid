@@ -1,7 +1,27 @@
 ---
 name: cv-profile
-description: Import an existing CV into an evidence-backed private profile, interview the owner about gaps, review refresh diffs, and export selected CVs with cv-buid and Quarto.
+description: Maintain evidence-backed private career profiles and route CV or resume work through content, layout and final verification skills. Use for imports, refreshes, tailored selections and document revisions.
 ---
+
+## Outcome
+
+Produce reviewable career documents from one private profile. Content variants
+and visual styles are separate inputs. Done means requested documents exist,
+their facts reconcile with evidence, and every final rendered page was checked.
+
+## Inputs and routing
+
+- Read [../cv-content/SKILL.md](../cv-content/SKILL.md) for importing facts,
+  rewriting prose, selecting a resume or full CV, and recording omissions.
+- Read [../cv-layout/SKILL.md](../cv-layout/SKILL.md) when formatting documents.
+- Read [../cv-qa/SKILL.md](../cv-qa/SKILL.md) before delivery.
+
+These skills are also discovered through `.agents/skills` in this repository.
+An installed workflow should copy all four skill folders together. Automatic
+invocation remains enabled; the router chooses the relevant work, not a style
+based on a filename or page count.
+
+## Profile workflow
 
 Use the installed `cv-buid` CLI. Keep the user's canonical profile and source
 evidence outside this package repository. Start from `examples/profile.json`
@@ -37,7 +57,10 @@ For refreshes, write a candidate profile separately and show
 replacing canonical facts. Select entries for opportunities; tailor wording
 within the supported evidence rather than expanding the claims.
 
-Run `cv-buid validate PROFILE`, then
+For editable Word, use `cv-buid docx PROFILE SELECTION --style STYLE.json --out CV.docx`.
+It uses ordinary paragraphs and right date tabs. PDF conversion is external;
+use a supported local document renderer and inspect the actual DOCX render.
+For Quarto, run `cv-buid validate PROFILE`, then
 `cv-buid quarto PROFILE SELECTION --out PRIVATE/cv.qmd`.
 Render with `quarto render PRIVATE/cv.qmd --to pdf --no-execute`.
 `--style hyndman` requires the separately licensed Quarto Vitae extension.
