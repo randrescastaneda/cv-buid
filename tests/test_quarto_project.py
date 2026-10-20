@@ -51,3 +51,17 @@ class QuartoOwnership(unittest.TestCase):
         self.assertIn('enabled: false', source)
         self.profile['entries']['research-role']['fields']['url'] = 'javascript:alert(1)'
         with self.assertRaises(ValueError): draft_qmd(self.profile, self.selection)
+
+    def test_work_links_use_verified_year_without_inventing_missing_dates(self):
+        profile = copy.deepcopy(self.profile)
+        profile['entries']['tool'] = {'kind': 'software', 'status': 'confirmed',
+            'evidence': [{'source_id': 'user-cv', 'locator': 'Software'}],
+            'fields': {'title': 'Synthetic Tool', 'when': 'Mar 2024',
+                       'url': 'https://example.org/tool'}}
+        selection = {'sections': [{'title': 'Software', 'entry_ids': ['tool']}]}
+        source = draft_qmd(profile, selection)
+        self.assertIn('Synthetic Tool (Mar [2024](https://example.org/tool))', source)
+        del profile['entries']['tool']['fields']['when']
+        source = draft_qmd(profile, selection)
+        self.assertIn('Synthetic Tool [Repository](https://example.org/tool)', source)
+        self.assertNotIn('[2024]', source)

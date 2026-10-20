@@ -48,14 +48,26 @@ def draft_qmd(profile, selection):
                 content += div([line], '.cv-career custom-style="CV Career"')
                 if department.strip(): content += div([text(department.strip())], '.cv-support custom-style="CV Support"')
             elif kind == 'education':
-                line = text(title)
+                line = '**' + text(title) + '**'
                 if when: line += ' [' + text(when) + ']{.cv-date}'
-                content += div([line], '.cv-career custom-style="CV Career"')
+                content += div([line], '.cv-degree custom-style="CV Degree"')
                 if org: content += div([text(org)], '.cv-institution custom-style="CV Institution"')
             elif title:
                 label = title + (' | ' + org if kind == 'software' and org else '')
-                if when: label += ' (' + when + ')'
-                content += [linked_title({'title': label, 'url': f['url']}) if f.get('url') else text(label), '']
+                line = text(label)
+                if f.get('url'):
+                    # Validate the target with the shared URL guard. Never derive
+                    # a software date from its version, title or current year.
+                    linked_title({'title': label, 'url': f['url']})
+                    if when and re.search(r'\b(?:19|20)\d{2}\b', when):
+                        match = re.search(r'\b(?:19|20)\d{2}\b', when)
+                        date = text(when[:match.start()]) + '[' + match.group() + '](' + f['url'] + ')' + text(when[match.end():])
+                        line += ' (' + date + ')'
+                    else:
+                        if when: line += ' (' + text(when) + ')'
+                        line += ' [' + ('Repository' if kind == 'software' else 'Source') + '](' + f['url'] + ')'
+                elif when: line += ' (' + text(when) + ')'
+                content += [line, '']
                 if org and kind != 'software': content += div([text(org)], '.cv-support custom-style="CV Support"')
             if f.get('description'):
                 content += div([text(f['description'])], '.cv-support custom-style="CV Support"') if title else [text(f['description']), '']

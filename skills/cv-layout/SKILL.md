@@ -32,12 +32,18 @@ The preset uses an 18 pt name, 11–12 pt uppercase headings, 10–11 pt body an
 9–10 pt contacts. Prefer 11 pt body when space permits. Use roughly 1.9 cm side
 margins and moderate vertical margins.
 
-Emphasize employer and institution names above subordinate position labels in
-the professional preset. Preserve the same hierarchy in PDF and Word.
+Emphasize employers above subordinate position labels in work experience.
+In education, use bold degree names and regular university names. Preserve
+these distinct hierarchies in PDF and Word, and honor the owner's degree order.
 
 Keep three guides: primary information at the left margin, supporting details
-and bullets at consistent indents, dates ending at one right tab. Use black on
-white, consistent paragraph spacing and restrained bold for recurring categories.
+and bullets at consistent indents, dates ending at one right tab. Use black body
+text on white and a muted, readable blue for links, consistent paragraph spacing
+and restrained bold for recurring categories. For dated works, link only a
+verified year; preserve full contact links. Never invent software dates: use an
+existing citation/release year with evidence, or a clear linked Repository label
+and report the exception. Accepted papers may link the available working-paper
+year without implying that the journal article is already published.
 The preset has no italics, including citations. Thin 0.5 pt black dividers are
 optional, not a requirement. A name block needs no decorative rule.
 

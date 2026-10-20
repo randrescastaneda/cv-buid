@@ -21,8 +21,8 @@ format:
     toc: false
     number-sections: false
     colorlinks: true
-    urlcolor: black
-    linkcolor: black
+    urlcolor: cvlink
+    linkcolor: cvlink
     keep-tex: true
     latex-auto-install: false
     include-in-header: styles/pdf-header.tex

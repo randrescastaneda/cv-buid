@@ -42,6 +42,10 @@ promise. Bring any desired Word edits back into QMD before rendering again.
 
 The professional preset uses Calibri, 11 pt body and no italics. Dates use a
 right-aligned guide for employment and education. Contacts stay in body text.
+Employers are prominent above regular position titles; education instead uses
+bold degrees and regular university names. Links use muted blue #356A80. Dated
+works link only a supported year. Undated software gets a clear Repository
+link until a citation or release year is verified; never invent a date.
 The optional `--profile mac` finds Calibri in a standard Microsoft Word Mac
 installation. Otherwise use installed fonts or explicitly configure an approved
 sans-serif fallback. Check embedded fonts and every final page.

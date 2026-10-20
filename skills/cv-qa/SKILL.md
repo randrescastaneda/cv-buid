@@ -27,6 +27,10 @@ Quarto pipeline, or treat independently edited Word content as authoritative.
    consistent indents, proper right date tabs, readable sizes, resolved font,
    working links, and no layout tables, text boxes, columns or graphics in the
    professional preset. Verify no italics are applied or inherited.
+   Check that education emphasizes degrees while experience emphasizes employers.
+   For year-only linking, reconcile each date with evidence and verify the actual
+   PDF annotation and optional Word link label. Keep contact links explicit and
+   disclose undated exceptions; check muted link color remains readable on white.
 3. Run the documented Quarto command on each final QMD and rasterize its
    primary PDF. If optional DOCX is retained, derive it from the same QMD and
    render it separately for QA. Inspect every page for clipping, overlap, missing glyphs,
