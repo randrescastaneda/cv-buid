@@ -29,3 +29,13 @@ it, rather than changing the owner's selected structure automatically.
 Typography and spacing belong to a style file. Entry choice, shortening and
 section order belong to a content selection. Changing the typeface must not
 silently remove an entry; changing from CV to resume must not depend on a style.
+
+## Profile voice and optional version dates
+
+[Prospects](https://www.prospects.ac.uk/careers-advice/cvs-and-cover-letters/writing-a-personal-statement-for-your-cv/) accepts first or third person with consistency.
+[Cambridge](https://www.careers.cam.ac.uk/files/cambridgecvsandapplications.pdf) favors concise note form, while
+[Harvard resume guidance](https://careerservices.fas.harvard.edu/resources/create-a-strong-resume/) omits personal pronouns. Match the document and owner preference; a full first-person profile and implied-first-person resume bullets can coexist.
+
+These sources do not establish a mandatory closing version month/year. If the
+owner requests one, treat it as explicit version information and prefer restrained
+whitespace over optional ornament. Verify its placement in each rendered output.

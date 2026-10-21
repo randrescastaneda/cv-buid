@@ -3,7 +3,7 @@ import argparse
 from pathlib import Path
 from docx import Document
 from docx.enum.style import WD_STYLE_TYPE
-from docx.enum.text import WD_TAB_ALIGNMENT
+from docx.enum.text import WD_TAB_ALIGNMENT, WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
 from docx.shared import Cm, Inches, Pt, RGBColor
 
@@ -31,7 +31,7 @@ normal = doc.styles['Normal']
 normal.font.size = Pt(11)
 normal.paragraph_format.line_spacing = 1.06
 normal.paragraph_format.space_after = Pt(3)
-for name in ['Body Text','First Paragraph','Compact','CV Career','CV Degree','CV Contact','CV Support','CV Employer','CV Institution','CV Entry Lead','CV Support Keep']:
+for name in ['Body Text','First Paragraph','Compact','CV Career','CV Degree','CV Contact','CV Support','CV Employer','CV Institution','CV Entry Lead','CV Support Keep','CV Revision']:
     if name not in doc.styles: doc.styles.add_style(name, WD_STYLE_TYPE.PARAGRAPH)
     doc.styles[name].base_style = normal
 doc.styles['Title'].font.size = Pt(18)
@@ -60,6 +60,11 @@ for name in ['CV Employer']:
     doc.styles[name].paragraph_format.keep_with_next = True
 doc.styles['CV Institution'].font.size = Pt(11)
 doc.styles['CV Institution'].font.bold = False
+revision = doc.styles['CV Revision'].paragraph_format
+revision.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+revision.space_before = Pt(33)
+revision.space_after = Pt(0)
+revision.keep_together = True
 for name in ['Hyperlink','FollowedHyperlink']:
     if name not in doc.styles: doc.styles.add_style(name, WD_STYLE_TYPE.CHARACTER)
     doc.styles[name].font.color.rgb = RGBColor.from_string('356A80')

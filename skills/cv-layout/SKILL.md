@@ -51,6 +51,12 @@ Balance comparable bullets without deleting achievements or inventing symmetry.
 Use enough line spacing for comfortable reading. Let a full CV gain pages when
 necessary. For a strict page target, revisit the selection before shrinking type.
 Keep headings with following content and avoid splitting short entries.
+If requested, place an explicit month/year version date in a semantic
+`.cv-revision` block at the end. Its PDF filter and Word `CV Revision` style
+provide right alignment and several-line-equivalent spacing. Keep it with
+substantive final content and inspect the final page; never add a page containing
+only a date. A version date or decorative asterisks are not universal CV rules.
+Prefer whitespace when the owner leaves decoration optional.
 
 QMD contains semantic Markdown and stable entry IDs. `_quarto.yml` owns shared
 and per-format settings. PDF uses its LaTeX header/configuration and a small

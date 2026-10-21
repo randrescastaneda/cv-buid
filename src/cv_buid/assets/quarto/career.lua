@@ -39,6 +39,8 @@ function Div(el)
     return wrap(el.content, '{\\fontsize{9.5}{11.5}\\selectfont', '\\par}')
   elseif el.classes:includes('cv-employer') then
     return wrap(el.content, '{\\fontsize{11.5}{14}\\selectfont\\bfseries', '\\par}')
+  elseif el.classes:includes('cv-revision') then
+    return wrap(el.content, '\\par\\nobreak\\addvspace{33pt}{\\raggedleft', '\\par}')
   elseif el.classes:includes('cv-support') then
     return wrap(el.content, '\\begin{list}{}{\\setlength{\\leftmargin}{0.42cm}\\setlength{\\rightmargin}{0pt}\\setlength{\\topsep}{0pt}}\\item\\relax', '\\end{list}')
   elseif el.classes:includes('cv-career') or el.classes:includes('cv-degree') then

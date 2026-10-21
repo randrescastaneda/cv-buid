@@ -49,6 +49,9 @@ link until a citation or release year is verified; never invent a date.
 The optional `--profile mac` finds Calibri in a standard Microsoft Word Mac
 installation. Otherwise use installed fonts or explicitly configure an approved
 sans-serif fallback. Check embedded fonts and every final page.
+An optional final `.cv-revision` block uses format-specific right alignment and
+33 pt of preceding space. Its month/year is explicit QMD content, not a date
+silently regenerated on every render. Omit it unless the owner requests it.
 
 The default reference can be created at a new path with
 `python scripts/create_word_reference.py NEW_REFERENCE.docx`. The command

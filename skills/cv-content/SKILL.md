@@ -25,6 +25,11 @@ explicitly require a rewrite. Connect sentences with supported relationships.
 Use concrete verbs and explain technical work in ordinary professional language.
 Keep official titles and publication titles accurate. Do not manufacture metrics,
 results or causal links to improve a sentence or balance bullet lengths.
+Honor the owner's preferred profile voice consistently. A full prose profile
+may use natural first person; compact experience bullets and resumes can use
+implied first person. Replace illustrative examples with substantive, evidenced
+responsibilities when the owner rejects their prominence. An omission from a
+variant need not delete the underlying private career evidence.
 
 Keep stable factual entries and evidence in one private career profile. Keep
 reviewed variant wording, inclusion and order in separate authoritative QMD
