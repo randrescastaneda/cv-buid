@@ -12,4 +12,3 @@ The unfinished Word backend, presentation assets and extra legacy exporters
 were not copied wholesale. Current candidate: `0.2.0.dev0`; not released. The synthetic starter now
 reuses the staged renderer port and separate generic PDF/Word presentation.
 The original unversioned package and all personal sources remain untouched.
-
