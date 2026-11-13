@@ -9,5 +9,7 @@ skills, seeding/render helpers and legacy Word code. That folder is preserved
 unchanged. The four later generic skills and their references were reconciled
 here; routing now names only commands actually present in this prototype.
 The unfinished Word backend, presentation assets and extra legacy exporters
-were not copied wholesale. Prototype version: `0.1.2.dev0`; not published.
+were not copied wholesale. Current candidate: `0.2.0.dev0`; not released. The synthetic starter now
+reuses the staged renderer port and separate generic PDF/Word presentation.
+The original unversioned package and all personal sources remain untouched.
 

@@ -65,11 +65,11 @@ fonts and DOCX text/relationships; inspect every PDF page. Compare source,
 evidence and presentation hashes before/after. Never run a destructive test in
 the owner's working checkout.
 
-The review branch runs synthetic unit and wheel-install checks on native
-Windows and macOS. Full native Windows renderer acceptance remains pending:
-run the optional fixture and real-render acceptance on a Windows environment
-with a compatible reviewed renderer and licensed fonts. Prior checks of that
-renderer alone are supporting history, not proof of the new adapter.
+The review branch runs separate native Windows/macOS unit and installed-command
+Quarto acceptance workflows. The latter uses fictional workspaces with free TeX
+fonts through both builtin and script backends. It does not certify a private
+project's licensed Calibri installation or Word application pagination. The
+optional external fixture suite remains useful for project-specific contracts.
 
 ## Starter and upgrades
 

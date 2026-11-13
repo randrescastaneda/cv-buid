@@ -114,7 +114,8 @@ def apply_upgrade(project, plan, backup_directory=None):
         for name in reversed(changed):
             path = local_path(root, name)
             # Never roll back an intervening user edit. Original bytes remain in backup.
-            if path.read_bytes() == prepared[name]:
+            current = path.read_bytes() if path.is_file() else None
+            if current == prepared[name]:
                 if previous[name] is None:
                     path.unlink()
                 else:

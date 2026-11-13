@@ -1,5 +1,6 @@
 """Actual installed-command Quarto/watch acceptance using synthetic workspaces."""
 import argparse
+import contextlib
 import hashlib
 import json
 import os
@@ -60,6 +61,25 @@ def alive(pid):
     return bool(result.stdout.strip()) and not result.stdout.strip().startswith('Z')
 
 
+@contextlib.contextmanager
+def windows_file_lock(path, share):
+    """Hold a real Win32 file handle; no mocked sharing semantics."""
+    import ctypes
+    from ctypes import wintypes
+    api = ctypes.WinDLL('kernel32', use_last_error=True)
+    api.CreateFileW.argtypes = [wintypes.LPCWSTR, wintypes.DWORD, wintypes.DWORD,
+                               ctypes.c_void_p, wintypes.DWORD, wintypes.DWORD, wintypes.HANDLE]
+    api.CreateFileW.restype = wintypes.HANDLE
+    api.CloseHandle.argtypes = [wintypes.HANDLE]
+    handle = api.CreateFileW(str(path), 0x80000000, share, None, 3, 0, None)
+    if handle == ctypes.c_void_p(-1).value:
+        raise ctypes.WinError(ctypes.get_last_error())
+    try:
+        yield
+    finally:
+        api.CloseHandle(handle)
+
+
 def run_case(root, mode, report, artifacts):
     env = dict(os.environ, PYTHONUTF8='1', PYTHONPATH='')
     cli = [sys.executable, '-m', 'cv_buid.cli']
@@ -101,6 +121,22 @@ def run_case(root, mode, report, artifacts):
         if child.poll() is None:child.send_signal(signal.CTRL_BREAK_EVENT if os.name == 'nt' else signal.SIGINT)
         child.wait(timeout=20);stream.close()
         assert child.returncode == 130, child.returncode
+    if os.name == 'nt':
+        before = hashes()
+        # Lock the final destination to exercise rollback of earlier replacements.
+        with windows_file_lock(output / 'full-cv.docx', share=3):
+            result = subprocess.run(command, env=env, capture_output=True, text=True, encoding='utf-8', timeout=240)
+            assert result.returncode != 0
+            assert hashes() == before
+        build()
+        events.append('native_output_sharing_lock_retention_and_recovery')
+        before = hashes()
+        with windows_file_lock(qmd, share=0):
+            result = subprocess.run(command, env=env, capture_output=True, text=True, encoding='utf-8', timeout=30)
+            assert result.returncode != 0
+            assert hashes() == before
+        build()
+        events.append('native_source_sharing_lock_retention_and_recovery')
     child, stream = start(log)
     try:
         count = lambda: log.read_text(encoding='utf-8', errors='replace').count('Built:')

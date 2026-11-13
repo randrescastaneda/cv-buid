@@ -111,6 +111,15 @@ class StarterAndUpgrade(unittest.TestCase):
             apply_upgrade(self.root, plan)
         self.assertEqual(skill.read_bytes(), before)
 
+    def test_missing_skill_replace_failure_keeps_original_error(self):
+        skill = self.root / '.agents/skills/cv-project/SKILL.md'
+        skill.unlink()
+        plan = plan_upgrade(self.root)
+        with patch('cv_buid.upgrade.os.replace', side_effect=PermissionError('fixture lock')):
+            with self.assertRaisesRegex(PermissionError, 'fixture lock'):
+                apply_upgrade(self.root, plan)
+        self.assertFalse(skill.exists())
+
     def test_config_candidate_requires_review_and_keeps_paths_inside_project(self):
         path = self.root / 'candidate.json'
         config = json.loads((self.root / 'cv-buid.json').read_text())
