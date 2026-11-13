@@ -2,6 +2,7 @@
 from html.parser import HTMLParser
 from pathlib import Path
 import shutil
+import re
 import subprocess
 import zipfile
 
@@ -26,8 +27,18 @@ def main():
         content = content.replace('href="./"', 'href="index.html"')
         Assets().feed(content)
         (target / name).write_text(content, encoding='utf-8')
+    documents = [(target / name).read_text(encoding='utf-8') for name in PAGES]
+    head = re.search(r'<head>(.*?)</head>', documents[0], re.S).group(1)
+    head = re.sub(r'<script\b.*?</script>', '', head, flags=re.S)
+    body = []
+    for document in documents:
+        main = re.search(r'<main\b[^>]*>(.*?)</main>', document, re.S).group(1)
+        body.append('<section>' + main + '</section>')
+    style = '<style>.tab-pane{display:block!important;opacity:1!important}.nav-tabs{display:none!important}section{break-before:page}section:first-child{break-before:auto}main{display:block}body{max-width:60rem;margin:0 auto;padding:1.5rem}button{display:none!important}</style>'
+    combined = '<!doctype html><html lang="en"><head>' + head + style + '</head><body><main class="content">' + ''.join(body) + '</main></body></html>'
+    (target / 'preview-all.html').write_text(combined, encoding='utf-8')
     (target / 'OPEN-FIRST.txt').write_text(
-        'Extract this entire folder, then double-click index.html.\n'
+        'Extract the folder, then open preview-all.html for the complete single-file guide.\n'
         'The four HTML files embed their display assets and work without a server.\n'
         'Keep the HTML files together so navigation between pages works.\n'
         'This bundle contains generic toolkit documentation only.\n', encoding='utf-8')

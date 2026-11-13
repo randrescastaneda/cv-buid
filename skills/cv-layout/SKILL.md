@@ -64,7 +64,7 @@ presentation filter. Optional Word uses `reference-doc` for Word styles and
 page properties, including margins, size and headers/footers; its body content
 is ignored. Never claim that a DOCX reference styles PDF or equalizes pagination.
 
-Use cv-buid build --project PROJECT for an adopted project. It runs that
+Use cv-buid build --project PROJECT for an adopted project. It uses the configured shared engine or that
 project's reviewed renderer and never regenerates QMD. Use the renderer's own
 instructions for variants, output locations and profile selection. Do not assume
 this prototype includes the later local init-quarto/render/Word commands.

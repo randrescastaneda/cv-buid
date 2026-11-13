@@ -5,24 +5,25 @@ toc: false
 
 ::: {.hero}
 ::: {.eyebrow}
-Development preview · 0.1.2.dev0
+Development preview · 0.2.0.dev0
 :::
 
 # Your CV stays in your repository.
 
 ::: {.lead}
 Keep career evidence, reviewed Quarto documents and your agent instructions
-together in a private workspace. Use cv-buid to connect that workspace to its
-existing renderer, with deliberate edits and reviewable changes.
+together in a private workspace. Use cv-buid to start that workspace or connect its existing renderer, with
+deliberate edits and reviewable changes.
 :::
 
 [Connect an existing project](quick-start.qmd){.action-link}
 :::
 
 ::: {.callout-note title="What works today"}
-Adopt a project that already has a reviewed Python renderer. The toolkit adds a
-small config and a project skill, then delegates build and watch commands to
-that renderer. A bundled starter renderer remains on the [v1 checklist](v1.qmd).
+Start a new fictional workspace with `cv-buid init`, or adopt an existing
+project without replacing reviewed content. The toolkit supplies a shared staged
+renderer and reviewable config/skill upgrades. No tools or fonts are installed
+by a build. Replace all starter examples before sharing a real CV.
 :::
 
 ## A clear home for each source
@@ -46,7 +47,8 @@ cv-buid build
 cv-buid build --watch
 ```
 
-The reviewed renderer owns its output paths, fonts, locking and recovery behavior.
+The configured shared engine or reviewed project renderer owns output paths,
+fonts, locking and recovery behavior.
 Your existing direct rendering command remains available. QMD is never regenerated
 from historical JSON selections during a build.
 
@@ -57,6 +59,6 @@ resolves uncertainty and approves factual changes. PDF and optional Word derive
 from the same QMD, with separate presentation files and potentially different
 pagination. Public exports use explicit field allowlists and remain staging files.
 
-The adapter has passed package and macOS renderer acceptance checks. Native
-Windows unit checks and complete renderer acceptance are distinct milestones;
-see the [current verification boundary](v1.qmd#verification).
+CI tests installed-command rendering using fictional workspaces on Windows and
+macOS. Unit and real rendering results are recorded separately; see the
+[current verification boundary](v1.qmd#verification).

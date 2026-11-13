@@ -16,9 +16,10 @@ script, not a sandbox for arbitrary imported repositories.
 
 The QMD list and evidence/instruction paths describe authority for agents.
 They are validated as existing files but are not used to generate prose or to
-reconfigure a renderer's hard-coded project layout. The existing private
-renderer remains the source of its input/output and font policies. This is an
-adapter seam, not extraction of a new universal render engine.
+reconfigure a script renderer's hard-coded project layout. With `renderer: builtin`, all listed
+QMD files select variants within one Quarto project directory. Existing script renderers retain their own input/output and font policies.
+New starter projects use the shared, staged toolkit engine ported from the
+proven renderer; no renderer is copied into each new workspace.
 
 The same-process adapter passes only `--watch` and an optional `--profile`,
 preserves renderer exit codes, and restores arguments, cwd, import path and
@@ -69,3 +70,27 @@ Windows and macOS. Full native Windows renderer acceptance remains pending:
 run the optional fixture and real-render acceptance on a Windows environment
 with a compatible reviewed renderer and licensed fonts. Prior checks of that
 renderer alone are supporting history, not proof of the new adapter.
+
+## Starter and upgrades
+
+`cv-buid init NEW_DIRECTORY` creates synthetic evidence, two authoritative QMD
+variants, separate presentation files and private instructions. The target must
+not exist. JSON project schema v1 is stable; `renderer` accepts either `builtin`
+or a reviewed relative Python script path. The machine-readable structural
+schema is in schemas/project.schema.json; runtime validation also checks paths,
+existence, symlink boundaries and the single-project requirement for builtin.
+
+`cv-buid upgrade --out PLAN.json` writes a reviewable diff without changing
+project inputs. Optional `--candidate CANDIDATE.json` proposes config values.
+`apply-upgrade PLAN.json` validates hashes again and writes only config and an
+unchanged recognized generated skill. Backups are retained; interruption and
+partial failures roll back toolkit writes. An intervening user edit is preserved.
+Customized skills are never automatically replaced. `--backup-directory PATH`
+can place backups in another private location. QMD, evidence and AGENTS.md are
+never upgrade targets. Rerunning an applied current upgrade produces no changes.
+
+For self-contained acceptance, install the wheel and run
+`python tests/check_starter.py --artifacts dist/native-evidence`. Both builtin
+and script backends build real PDFs/Word, watch saves, retain outputs after a
+LaTeX failure, recover, reject a second builder and interrupt an active TeX tree.
+All inputs are fictional. Native Windows and macOS run the same checksummed wheel.

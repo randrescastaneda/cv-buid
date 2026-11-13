@@ -57,6 +57,11 @@ For refreshes, write a candidate profile separately and show
 replacing canonical facts. Select entries for opportunities; tailor wording
 within the supported evidence rather than expanding the claims.
 
+For a new independent private repository, cv-buid init NEW_DIRECTORY creates
+fictional starter files and refuses existing directories. Replace all examples
+through the evidence/import/interview workflow before sharing a real CV. Builtin
+rendering uses the shared staged engine; existing script renderers remain valid.
+
 For an existing private repository, read its cv-buid.json and project instructions.
 Use cv-buid build --project PROJECT, optionally --watch, to run its reviewed
 local renderer. Config names evidence and authoritative QMD; it never selects
@@ -84,3 +89,7 @@ exports only exact scalar fields. Entries also require `public: true` and a
 corroborated or confirmed status. The command never publishes. Review the
 export and website patch within the user's publication authorization.
 Creating a draft does not authorize messages, pushes, merges, or deployments.
+
+Plan upgrades with cv-buid upgrade --out PLAN.json, review the diff, then use
+apply-upgrade. Only config and recognized generated skills are eligible; preserve
+custom instructions and never treat QMD/evidence as upgrade targets.

@@ -1,48 +1,55 @@
 # cv-buid
 
-Local tools for private career evidence and QMD-first CV projects. Development version 0.1.2.dev0 extends the upstream v0.1.1 scaffold. It has
+Local tools for private career evidence and QMD-first CV projects. Development version 0.2.0.dev0 extends the upstream v0.1.1 scaffold. It has
 no public package release. Python 3.11+ is required; JSON has no runtime dependencies.
 
 Keep career facts/evidence, reviewed QMD, presentation files and custom agent
 instructions in your own private repository. The toolkit contains generic code,
 synthetic examples and reusable guidance only.
 
-## Connect an existing project
+## Start or connect a private workspace
 
-Install this checkout locally with `python3 -m pip install .`; on Windows use
-`py -3 -m pip install .`. This does not install Quarto, fonts or TeX, and it does
-not change global agent configuration. Inspect the project's renderer first.
+Install from the review wheel with its provided hash-checked requirements file,
+or from this checkout in a local virtual environment. See the
+[Quick start](docs/quick-start.qmd) for exact Mac and Windows commands.
+
+```sh
+cv-buid init /path/to/new-private-cv
+cv-buid build --project /path/to/new-private-cv
+cv-buid build --project /path/to/new-private-cv --watch
+```
+
+The new directory contains fictional Alex Example QMD and evidence, separate PDF
+and Word presentation, owner instructions and a project skill. Replace the
+fictional content before sharing anything. Init refuses an existing directory.
+The shared engine retains staged builds, stale-source checks, failure rollback,
+OS locking and child-process cleanup from the proven renderer. No font binaries
+or tools are installed by build. The starter uses TeX's Helvetica-compatible
+sans-serif family for PDF and an explicit Arial Word reference.
+
+For an existing project, preserve its renderer and reviewed content:
 
 ```sh
 cv-buid adopt /path/to/private-project --renderer render.py --evidence-profile private/profile.json --qmd private/quarto/resume.qmd --qmd private/quarto/full-cv.qmd --dry-run
 ```
 
-Review the plan, then repeat without `--dry-run`. Adoption adds `cv-buid.json`
-and `.agents/skills/cv-project/SKILL.md`. It refuses existing targets and never
-replaces QMD, evidence, presentation files or `AGENTS.md`.
+Review the plan and repeat without --dry-run. Only config and a generated project
+skill are added; existing targets are refused. Existing AGENTS.md and QMD are
+never overwritten. Script renderers keep their existing layout and output rules.
+With renderer=builtin, the config's QMD list selects variants in one Quarto project.
 
-From the private repository root:
+## Reviewable upgrades
 
 ```sh
-cv-buid build
-cv-buid build --watch
+cv-buid upgrade --project /path/to/private-project --out upgrade-plan.json
+cv-buid apply-upgrade upgrade-plan.json --project /path/to/private-project
 ```
 
-The installed command is the same on Mac and Windows. Alternatively use
-`python3 -m cv_buid.cli build` on Mac or `py -3 -m cv_buid.cli build` on Windows.
-From another directory append `--project /path/to/private-project`. Stop watch
-mode with Ctrl+C. `--profile NAME` is passed to the existing renderer.
-
-The prototype delegates to the project-owned renderer **in the same process**.
-That renderer owns Quarto commands, actual input/output locations, font/profile
-checks, locking, output retention and watch behavior. Config records source
-ownership; changing its QMD list does not relocate inputs in an existing script.
-The supported renderer contract is a trusted Python entry point accepting
-`--watch` and `--profile NAME`, using exit codes 0/1/2/130. Existing direct
-renderer commands keep working. There is no duplicate renderer or bundled font.
-
-[Integration details and reconciliation](docs/project-integration.md) explain
-the boundary, tests and remaining Windows verification.
+Read the plan's diff first. An optional --candidate JSON file proposes config
+changes. Application checks original hashes again, keeps backups, and rolls back
+on failure. Customized skills are reported for manual review and are not replaced.
+QMD, evidence and owner AGENTS.md are never upgrade targets. See
+[Project contract](docs/project-contract.qmd) and [release preparation](docs/release-preparation.md).
 
 ## Evidence and agents
 
@@ -59,14 +66,16 @@ staging, never automatic publication. The legacy `quarto` command can seed only
 a new draft path and refuses existing files; do not use it on reviewed sources.
 
 Run synthetic package tests with
-`PYTHONPATH=src python3 -m unittest discover -s tests -v`. Optional renderer
-integration tests and Windows commands are documented in the linked guide.
+`PYTHONPATH=src python3 -m unittest discover -s tests -v`. Self-contained installed-command acceptance is in tests/check_starter.py and
+runs against the same checksummed wheel on native macOS and Windows CI.
 
 
 ## Documentation preview
 
 The repository now includes a Quarto documentation site in docs/. Build it with
 `quarto render docs --to html --no-execute`; preview locally with
-`quarto preview docs --host 127.0.0.1 --no-browser`. Generated docs/_site and
-Quarto caches are ignored. No hosting or publication workflow is enabled.
+`quarto preview docs --host 127.0.0.1 --no-browser`. Generated docs/_site and Quarto caches are ignored. Private PR artifacts contain
+a single-file, script-free docs guide plus the interactive HTML pages. Extract
+the artifact and open preview-all.html; no localhost server is needed. No public
+hosting or deployment workflow is enabled.
 See [Quick start](docs/quick-start.qmd) and [Path to v1](docs/v1.qmd).
