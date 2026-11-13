@@ -11,6 +11,12 @@ import uuid
 from .project import CONFIG, SKILL, local_path, read_project, validate_config
 
 
+def template_bytes(name):
+    # Source checkouts can use CRLF while installed wheels and generated files
+    # use LF. Compare only recognized templates, with line endings normalized.
+    return files('cv_buid').joinpath('assets/' + name).read_bytes().replace(b'\r\n', b'\n')
+
+
 def digest(data):
     return hashlib.sha256(data).hexdigest() if data is not None else None
 
@@ -19,14 +25,14 @@ def plan_upgrade(project, candidate=None):
     root, current = read_project(project)
     desired = json.loads(Path(candidate).read_text(encoding='utf-8')) if candidate else current
     validate_config(root, desired)
-    assets = files('cv_buid').joinpath('assets')
-    template = assets.joinpath('project-skill.md').read_bytes()
-    old_template = assets.joinpath('project-skill-v1.md').read_bytes()
+    template = template_bytes('project-skill.md')
+    old_template = template_bytes('project-skill-v1.md')
     skill = local_path(root, SKILL)
     previous = skill.read_bytes() if skill.is_file() else None
     after = {CONFIG: (json.dumps(desired, indent=2) + '\n').encode()}
     manual = []
-    if previous in (None, old_template, template):
+    recognized = previous.replace(b'\r\n', b'\n') if previous is not None else None
+    if recognized in (None, old_template, template):
         after[SKILL] = template
     else:
         manual.append(SKILL)
@@ -50,7 +56,7 @@ def apply_upgrade(project, plan, backup_directory=None):
     if not isinstance(plan, dict) or set(plan) != {'schema_version', 'changes', 'manual_review'} or (type(plan['schema_version']) is not int or plan['schema_version'] != 1):
         raise ValueError('Unsupported upgrade plan')
     prepared, previous = {}, {}
-    template = files('cv_buid').joinpath('assets/project-skill.md').read_text(encoding='utf-8')
+    template = template_bytes('project-skill.md')
     for item in plan['changes']:
         name = item['path']
         if name not in {CONFIG, SKILL} or name in prepared:
@@ -67,10 +73,11 @@ def apply_upgrade(project, plan, backup_directory=None):
         if name == CONFIG:
             validate_config(root, json.loads(item['after']))
         else:
-            legacy = files('cv_buid').joinpath('assets/project-skill-v1.md').read_bytes()
-            if before not in (None, legacy, template.encode('utf-8')):
+            legacy = template_bytes('project-skill-v1.md')
+            recognized = before.replace(b'\r\n', b'\n') if before is not None else None
+            if recognized not in (None, legacy, template):
                 raise ValueError('Customized skill requires manual review')
-            if item['after'] != template:
+            if data != template:
                 raise ValueError('Only the installed generated skill template may be applied')
         prepared[name], previous[name] = data, before
     if not prepared:

@@ -17,6 +17,9 @@ jobs:
           python-version: '3.13'
       - run: python -m pip install setuptools==80.9.0
       - run: python scripts/build_package.py
+      - name: Verify source-distribution clean installation
+        shell: bash
+        run: python scripts/check_sdist.py dist/review-wheel/*.tar.gz
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: cv-buid-review-wheel

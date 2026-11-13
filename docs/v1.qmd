@@ -20,10 +20,10 @@ upgrades. It remains a review candidate, without a release or public deployment.
 
 ## Verification {#verification}
 
-The expanded local suite has 26 passing tests. Real clean-installed macOS
-acceptance passed both backends using only fictional inputs. Native Windows
-and macOS rendering results for the final revision belong to the PR's
-“Installed starter rendering” workflow; unit CI is reported separately.
+The expanded local suite has 27 passing tests. Real clean-installed macOS
+acceptance passed both backends using only fictional inputs. Native Windows and macOS rendering acceptance also passed both backends.
+Each final revision is checked by the PR's “Installed starter rendering”
+workflow; Python 3.11/3.13 unit CI is reported separately.
 
 Existing private CV wording, evidence and layout remain unchanged. Personal
 Calibri output is not inferred from the generic starter's free TeX-font tests.
@@ -32,12 +32,13 @@ is not certified by PDF checks.
 
 ## Remaining before release
 
-1. Verify the final native rendering matrix and review its artifacts, including
-   Windows output/source sharing cases where supported.
+1. Review the final native artifacts and application-level output behavior,
+   including opening generated Word files in Word and Windows sharing locks.
 2. Exercise an owner-led first-use interview/import and tailored selection against
    real evidence, with explicit review of uncertainty. No autonomous collector.
-3. Validate source-distribution installation and config/skill migrations across
-   future versions, then document the supported version policy.
+3. Extend guarded config/skill migration coverage across future released versions
+   and document a stable supported-version policy. Source-distribution clean
+   installation and starter smoke checks now run in CI.
 4. Review all packaging, template/font notices and docs accessibility; choose the
    release version and authorize a release separately.
 

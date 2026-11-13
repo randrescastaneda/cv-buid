@@ -57,6 +57,22 @@ class StarterAndUpgrade(unittest.TestCase):
         for name, data in protected.items(): self.assertEqual((self.root / name).read_bytes(), data)
         self.assertEqual(plan_upgrade(self.root)['changes'], [])
 
+    def test_crlf_checkout_and_generated_skills_upgrade_consistently(self):
+        assets = Path(self.temp.name) / 'crlf package' / 'assets'
+        assets.mkdir(parents=True)
+        for name in ['project-skill.md', 'project-skill-v1.md']:
+            data = files('cv_buid').joinpath('assets/' + name).read_bytes().replace(b'\r\n', b'\n')
+            (assets / name).write_bytes(data.replace(b'\n', b'\r\n'))
+        for crlf in [False, True]:
+            skill = self.old_skill()
+            data = skill.read_bytes().replace(b'\r\n', b'\n')
+            skill.write_bytes(data.replace(b'\n', b'\r\n') if crlf else data)
+            with patch('cv_buid.upgrade.files', return_value=assets.parent):
+                plan = plan_upgrade(self.root)
+                apply_upgrade(self.root, plan)
+                self.assertNotIn(b'\r\n', skill.read_bytes())
+                self.assertEqual(plan_upgrade(self.root)['changes'], [])
+
     def test_customized_skill_is_never_overwritten(self):
         skill = self.old_skill();skill.write_text('Custom owner instructions')
         plan = plan_upgrade(self.root)
