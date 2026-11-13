@@ -27,7 +27,9 @@ jobs:
       - name: Run synthetic package and adapter tests
         run: python -m unittest discover -s tests -v
       - name: Verify wheel installation and packaged adoption skill
+        env:
+          PYTHONPATH: ''
         run: |
           python -m pip install --no-deps .
           cv-buid --help
-          python -c "from importlib.metadata import files; assert any(str(p).endswith('cv_buid/assets/project-skill.md') for p in files('cv-buid'))"
+          python -c "from importlib.resources import files; assert 'name: cv-project' in files('cv_buid').joinpath('assets/project-skill.md').read_text(encoding='utf-8')"
