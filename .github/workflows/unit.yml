@@ -1,0 +1,33 @@
+name: Toolkit tests
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unit:
+    name: Unit (${{ matrix.os }}, Python ${{ matrix.python }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+        python: ['3.11', '3.13']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    env:
+      PYTHONUTF8: '1'
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Run synthetic package and adapter tests
+        run: python -m unittest discover -s tests -v
+      - name: Verify wheel installation and packaged adoption skill
+        run: |
+          python -m pip install --no-deps .
+          cv-buid --help
+          python -c "from importlib.metadata import files; assert any(str(p).endswith('cv_buid/assets/project-skill.md') for p in files('cv-buid'))"

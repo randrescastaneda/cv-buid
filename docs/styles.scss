@@ -1,0 +1,23 @@
+/*-- scss:defaults --*/
+$font-family-sans-serif: system-ui, -apple-system, "Segoe UI", sans-serif;
+$primary: #285c6a;
+$body-color: #20313b;
+$link-color: #285c6a;
+$navbar-bg: #f2f6f5;
+$navbar-fg: #20313b;
+$headings-font-weight: 650;
+
+/*-- scss:rules --*/
+.navbar-brand { font-weight: 750; letter-spacing: -0.035em; }
+.navbar { border-bottom: 1px solid #d9e4e1; }
+main { min-width: 0; }
+.hero { padding: 2.5rem 0 2rem; max-width: 56rem; }
+.eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #476966; }
+.hero h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); letter-spacing: -.045em; line-height: 1.1; margin: .6rem 0 1.2rem; }
+.hero .lead { max-width: 46rem; font-size: 1.18rem; line-height: 1.65; }
+.action-link { display: inline-block; padding: .65rem 1rem; color: white; background: #285c6a; border-radius: .35rem; text-decoration: none; font-weight: 600; }
+.action-link:hover, .action-link:focus { color: white; background: #1d4651; }
+.ownership { border-block: 1px solid #d9e4e1; padding: .6rem 0; margin: 1rem 0 2rem; }
+.ownership p { margin: .5rem 0; }
+pre, .sourceCode { max-width: 100%; }
+@media (max-width: 575px) { .hero { padding-top: 1.1rem; } .hero .lead { font-size: 1.05rem; } }

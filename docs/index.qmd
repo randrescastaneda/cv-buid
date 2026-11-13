@@ -1,0 +1,62 @@
+---
+title: ""
+toc: false
+---
+
+::: {.hero}
+::: {.eyebrow}
+Development preview · 0.1.2.dev0
+:::
+
+# Your CV stays in your repository.
+
+::: {.lead}
+Keep career evidence, reviewed Quarto documents and your agent instructions
+together in a private workspace. Use cv-buid to connect that workspace to its
+existing renderer, with deliberate edits and reviewable changes.
+:::
+
+[Connect an existing project](quick-start.qmd){.action-link}
+:::
+
+::: {.callout-note title="What works today"}
+Adopt a project that already has a reviewed Python renderer. The toolkit adds a
+small config and a project skill, then delegates build and watch commands to
+that renderer. A bundled starter renderer remains on the [v1 checklist](v1.qmd).
+:::
+
+## A clear home for each source
+
+::: {.ownership}
+**Private profile** — career facts, evidence and review status.
+
+**Reviewed QMD** — each résumé or CV's wording, selection and order.
+
+**Presentation files** — Quarto settings, PDF styling and the optional Word reference.
+
+**Project instructions** — your preferences and authority over the agent workflow.
+:::
+
+## Small commands, familiar rendering
+
+After installation and adoption, from your private project:
+
+```sh
+cv-buid build
+cv-buid build --watch
+```
+
+The reviewed renderer owns its output paths, fonts, locking and recovery behavior.
+Your existing direct rendering command remains available. QMD is never regenerated
+from historical JSON selections during a build.
+
+## Review before sharing
+
+Agents can inspect sources, propose evidence updates and show diffs. The owner
+resolves uncertainty and approves factual changes. PDF and optional Word derive
+from the same QMD, with separate presentation files and potentially different
+pagination. Public exports use explicit field allowlists and remain staging files.
+
+The adapter has passed package and macOS renderer acceptance checks. Native
+Windows unit checks and complete renderer acceptance are distinct milestones;
+see the [current verification boundary](v1.qmd#verification).

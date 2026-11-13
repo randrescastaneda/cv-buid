@@ -5,3 +5,9 @@ dist/
 __pycache__/
 private/
 *.pdf
+
+# Local documentation/browser previews
+docs/_site/
+docs/.quarto/
+output/playwright/
+.playwright-cli/

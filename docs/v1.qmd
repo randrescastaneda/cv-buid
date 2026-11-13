@@ -1,0 +1,49 @@
+---
+title: Path to a usable v1
+---
+
+The existing-project connector works on macOS with a reviewed local renderer.
+A dependable v1 should make that starting point clear and make installation,
+first use and recovery reproducible for another person.
+
+## Required before v1
+
+1. **Complete native Windows acceptance.** Run the installed adapter with real
+   Quarto, licensed fonts, watch saves, failure retention, recovery and shutdown.
+   Unit tests alone do not establish this behavior.
+2. **Provide a synthetic starter or settle the product boundary.** Either ship a
+   supported renderer/template with clear licenses, or release explicitly as an
+   existing-project connector. Today each user supplies a reviewed renderer.
+3. **Make integration tests self-contained.** A synthetic project should exercise
+   the renderer contract in CI without relying on anyone's private repository.
+4. **Finish installation and adoption compatibility.** Test the wheel, minimum
+   Python version, Windows/macOS paths and upgrades. Plan config/skill migrations
+   as reviewable diffs while preserving customized project instructions.
+5. **Reconcile the remaining local work before versioning a release.** Keep the
+   useful QMD migration helpers separate from retired Word-first code. Confirm
+   package/template licenses and choose a coherent version history.
+
+## Next quality improvements
+
+- Clear profile/config schemas and error examples; consistent validation of
+  evidence references and conflicted or proposed facts.
+- A repeatable output QA checklist covering text, links, font handling and pages,
+  with honest Word pagination limits.
+- Docs build/link checks and a reviewed distribution path. Publication and any
+  public website deployment require a separate decision.
+
+## Current verification {#verification}
+
+The local prototype passed 16 synthetic package tests, ten applicable macOS
+renderer fixture tests, and real installed-command Quarto build/watch acceptance.
+Five Windows-only renderer cases were skipped on Mac.
+
+Real résumé and CV checks were performed only in disposable private workspaces.
+Direct and adapter PDF pixels, text and links matched; derived Word body,
+relationships and styles matched. No private documents are included in this site.
+
+The review branch adds native Windows/macOS unit CI. Its current check results
+belong to the pull request. Complete Windows renderer acceptance remains pending.
+
+There is no service, autonomous collector, database or automatic publication step
+in this v1 plan. Career facts remain subject to the owner's review.

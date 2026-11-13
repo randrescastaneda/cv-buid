@@ -1,0 +1,30 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+    - quick-start.qmd
+    - project-contract.qmd
+    - v1.qmd
+website:
+  title: cv-buid
+  favicon: favicon.svg
+  navbar:
+    title: cv-buid
+    left:
+      - href: quick-start.qmd
+        text: Quick start
+      - href: project-contract.qmd
+        text: Project contract
+      - href: v1.qmd
+        text: Path to v1
+  page-footer: Development documentation · Local preview · No publishing workflow
+format:
+  html:
+    theme: [default, styles.scss]
+    toc: true
+    code-copy: true
+    code-overflow: wrap
+    lang: en
+execute:
+  enabled: false

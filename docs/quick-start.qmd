@@ -1,0 +1,97 @@
+---
+title: Quick start
+---
+
+## Before you start
+
+Use Python 3.11 or newer and a clone of this toolkit review branch. This
+development version has no public package release. Your private project must
+already contain reviewed QMD, an evidence profile and a trusted Python renderer
+that accepts `--watch` and `--profile NAME`.
+
+For Quarto PDF/Word rendering, install Quarto and the TeX/fonts required by that
+project. Quarto-managed TinyTeX can supply XeLaTeX without placing it on PATH.
+The toolkit installs no rendering software or fonts. Inspect unfamiliar renderer
+scripts before executing them.
+
+## 1. Install from the toolkit checkout
+
+These commands use a local virtual environment. Windows commands call its
+executables directly, avoiding changes to shell execution policy.
+
+::: {.panel-tabset}
+### macOS
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install .
+```
+
+### Windows PowerShell
+
+```powershell
+py -3 -m venv .venv
+.venv\Scripts\python.exe -m pip install .
+```
+:::
+
+## 2. Preview adoption
+
+Stay in the toolkit checkout. Replace the project path with your own clone.
+Paths after `--qmd` and `--evidence-profile` are relative to that private project.
+
+::: {.panel-tabset}
+### macOS
+
+```sh
+.venv/bin/cv-buid adopt /path/to/private-project --renderer render.py --evidence-profile private/profile.json --qmd private/quarto/resume.qmd --qmd private/quarto/full-cv.qmd --dry-run
+```
+
+### Windows PowerShell
+
+```powershell
+.venv\Scripts\cv-buid.exe adopt C:/path/to/private-project --renderer render.py --evidence-profile private/profile.json --qmd private/quarto/resume.qmd --qmd private/quarto/full-cv.qmd --dry-run
+```
+:::
+
+Review the plan and repeat without `--dry-run` to create `cv-buid.json` and
+`.agents/skills/cv-project/SKILL.md`. Existing adoption targets cause a refusal;
+there is no overwrite option. Existing `AGENTS.md`, QMD, evidence and presentation
+files stay intact. Each private project keeps its own instructions.
+
+## 3. Edit QMD, then build
+
+Edit the requested QMD variant directly in your private project. From the toolkit
+checkout, use the installed executable to select that project:
+
+::: {.panel-tabset}
+### macOS
+
+```sh
+.venv/bin/cv-buid build --project /path/to/private-project
+.venv/bin/cv-buid build --project /path/to/private-project --watch
+```
+
+### Windows PowerShell
+
+```powershell
+.venv\Scripts\cv-buid.exe build --project C:/path/to/private-project
+.venv\Scripts\cv-buid.exe build --project C:/path/to/private-project --watch
+```
+:::
+
+If `cv-buid` is on PATH, you can instead run `cv-buid build` from the private
+project root. Ctrl+C stops watch mode. Read your renderer's instructions for
+output paths and font/profile requirements; `--profile NAME` is forwarded to it.
+Restart watching after changing config, renderer code or toolkit installation.
+
+## If something fails
+
+- **Adoption target exists:** inspect the existing config/skill and compare it
+  manually. Preserve it rather than rerunning adoption over it.
+- **Tool, profile or font missing:** follow the private renderer's error and
+  setup instructions. No font is silently substituted.
+- **Output open in Word/PDF software:** close it and retry if the renderer reports
+  a replacement lock, especially on Windows.
+- **New project without a renderer:** this prototype's adoption path is not yet
+  a complete starter. See the [v1 priorities](v1.qmd).
