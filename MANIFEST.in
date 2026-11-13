@@ -1,0 +1,7 @@
+include README.md LICENSE THIRD_PARTY_NOTICES.md
+recursive-include skills *.md *.yaml
+recursive-include docs *.md *.qmd *.yml *.scss *.svg
+recursive-include schemas *.json
+recursive-include scripts *.py
+recursive-exclude docs/_site *
+recursive-exclude docs/.quarto *

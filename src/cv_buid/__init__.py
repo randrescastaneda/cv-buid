@@ -1,2 +1,2 @@
 """Evidence-backed CV profiles. No network or publication side effects."""
-__version__ = "0.1.2.dev0"
+__version__ = "0.2.0.dev0"

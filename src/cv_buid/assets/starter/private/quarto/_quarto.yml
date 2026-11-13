@@ -1,0 +1,26 @@
+project:
+  type: default
+  output-dir: output
+execute:
+  enabled: false
+filters: [styles/career.lua]
+format:
+  pdf:
+    pdf-engine: pdflatex
+    documentclass: article
+    papersize: letter
+    fontsize: 11pt
+    fontfamily: helvet
+    fontenc: T1
+    toc: false
+    number-sections: false
+    colorlinks: true
+    urlcolor: cvlink
+    linkcolor: cvlink
+    geometry: [left=1.9cm, right=1.9cm, top=1.65cm, bottom=1.65cm]
+    latex-auto-install: false
+    include-in-header: styles/pdf-header.tex
+  docx:
+    reference-doc: styles/reference.docx
+    toc: false
+    number-sections: false

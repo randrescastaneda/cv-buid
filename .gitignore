@@ -11,3 +11,7 @@ docs/_site/
 docs/.quarto/
 output/playwright/
 .playwright-cli/
+
+# Only fictional packaged starter data are versioned here.
+!src/cv_buid/assets/starter/private/
+!src/cv_buid/assets/starter/private/**

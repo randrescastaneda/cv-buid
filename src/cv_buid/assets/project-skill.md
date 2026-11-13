@@ -19,15 +19,19 @@ requested. PDF is primary; Word is derived from the same QMD, with independent
 presentation and potentially different pagination.
 
 From the root run cv-buid build; cv-buid build --watch optionally rebuilds on
-saves. Use --project PATH from another directory. These commands execute the
-reviewed renderer named in config, in the same process; inspect unfamiliar
-projects before running their scripts. The project renderer owns actual source
+saves. Use --project PATH from another directory. These commands use the configured builtin engine or execute a reviewed
+project script in the same process. Inspect unfamiliar project scripts before
+running them. The project renderer owns actual source
 and output locations, profile/font checks, locking, retention and watch rules.
-Config records source ownership; editing its qmd list does not reconfigure a
-project-owned renderer. Check the renderer's own instructions for output paths.
+With renderer=builtin, qmd selects files in one Quarto project. With a
+project-owned script, qmd records source ownership and does not reconfigure it. Check the renderer's own instructions for output paths.
 
 Reconcile final PDF/Word content and hyperlinks with QMD and evidence. Inspect
 every PDF page and disclose any unverified Word layout or platform behavior.
 Keep personal data and project-specific instructions in this private repo.
 Building does not authorize messages, public export, commits, pushes, merges
 or website publication. Never install tools or silently substitute fonts.
+
+For toolkit upgrades, create a cv-buid upgrade plan and review its diff before
+apply-upgrade. Stale plans are rejected; customized skills require manual review.
+Never overwrite QMD, evidence or AGENTS.md during an upgrade.

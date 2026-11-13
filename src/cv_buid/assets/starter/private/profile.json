@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-01-01",
+  "person": {
+    "name": "Alex Example",
+    "email": "alex@example.invalid",
+    "website": "https://example.org"
+  },
+  "sources": {
+    "user-cv": {
+      "type": "user-supplied",
+      "filename": "example.txt"
+    }
+  },
+  "entries": {
+    "research-role": {
+      "kind": "experience",
+      "status": "confirmed",
+      "public": false,
+      "fields": {
+        "title": "Research Analyst",
+        "organization": "Example Institute",
+        "when": "2020 - 2025",
+        "description": "Built reproducible workflows for survey analysis."
+      },
+      "evidence": [
+        {
+          "source_id": "user-cv",
+          "locator": "Experience"
+        }
+      ],
+      "notes": "Private interview context must never be exported."
+    },
+    "example-tool": {
+      "kind": "software",
+      "status": "confirmed",
+      "public": false,
+      "fields": {
+        "title": "Example tool",
+        "when": "2025",
+        "url": "https://example.org",
+        "description": "Synthetic demonstration entry."
+      },
+      "evidence": [
+        {
+          "source_id": "user-cv",
+          "locator": "Software"
+        }
+      ]
+    },
+    "skills": {
+      "kind": "skills",
+      "status": "confirmed",
+      "public": false,
+      "fields": {
+        "description": "Python, R and reproducible research workflows. All starter claims are fictional."
+      },
+      "evidence": [
+        {
+          "source_id": "user-cv",
+          "locator": "Skills"
+        }
+      ]
+    }
+  },
+  "review_questions": []
+}

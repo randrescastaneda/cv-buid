@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "cv-buid project config v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "renderer",
+    "evidence_profile",
+    "qmd",
+    "instructions"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "renderer": {
+      "oneOf": [
+        {
+          "const": "builtin"
+        },
+        {
+          "type": "string",
+          "pattern": "\\.py$"
+        }
+      ]
+    },
+    "evidence_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "qmd": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "\\.qmd$"
+      }
+    },
+    "instructions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

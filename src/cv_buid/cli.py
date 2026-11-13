@@ -229,6 +229,12 @@ def main(argv=None):
     p.add_argument("--instructions", action="append"); p.add_argument("--dry-run", action="store_true")
     p = sub.add_parser("build", help="Run the configured reviewed project renderer without regenerating QMD")
     p.add_argument("--project", default="."); p.add_argument("--watch", action="store_true"); p.add_argument("--profile")
+    p = sub.add_parser("init", help="Create a new synthetic private QMD workspace")
+    p.add_argument("directory")
+    p = sub.add_parser("upgrade", help="Create a reviewable config/generated-skill upgrade plan")
+    p.add_argument("--project", default="."); p.add_argument("--candidate"); p.add_argument("--out", required=True)
+    p = sub.add_parser("apply-upgrade", help="Apply an unchanged reviewed plan with backups")
+    p.add_argument("plan"); p.add_argument("--project", default="."); p.add_argument("--backup-directory")
     args = parser.parse_args(argv)
     try:
         if args.command == "inspect":
@@ -247,6 +253,18 @@ def main(argv=None):
             target.parent.mkdir(parents=True, exist_ok=True)
             with target.open("x", encoding="utf-8") as stream:
                 stream.write(content)
+        elif args.command == "upgrade":
+            from .upgrade import plan_upgrade
+            plan = plan_upgrade(args.project, args.candidate)
+            with Path(args.out).open("x", encoding="utf-8") as stream:
+                json.dump(plan, stream, indent=2); stream.write("\n")
+            print(json.dumps(plan, indent=2))
+        elif args.command == "apply-upgrade":
+            from .upgrade import apply_upgrade
+            print(json.dumps(apply_upgrade(args.project, load(args.plan), args.backup_directory), indent=2))
+        elif args.command == "init":
+            from .starter import init_project
+            print(init_project(args.directory))
         elif args.command == "adopt":
             from .project import adopt_project
             print(json.dumps(adopt_project(args.project, args.renderer, args.evidence_profile,

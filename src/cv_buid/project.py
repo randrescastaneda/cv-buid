@@ -37,9 +37,11 @@ def validate_config(root, config):
         raise ValueError('Expected schema_version, renderer, evidence_profile, qmd and instructions')
     if type(config['schema_version']) is not int or config['schema_version'] != 1:
         raise ValueError('Unsupported cv-buid project schema')
-    renderer = local_path(root, config['renderer'])
-    if renderer.suffix != '.py' or not renderer.is_file():
-        raise ValueError('renderer must name an existing, reviewed project Python script')
+    builtin = config['renderer'] == 'builtin'
+    if not builtin:
+        renderer = local_path(root, config['renderer'])
+        if renderer.suffix != '.py' or not renderer.is_file():
+            raise ValueError('renderer must be builtin or an existing reviewed Python script')
     if not local_path(root, config['evidence_profile']).is_file():
         raise ValueError('evidence_profile must name an existing private evidence profile')
     qmd = config['qmd']
@@ -51,6 +53,12 @@ def validate_config(root, config):
         path = local_path(root, item)
         if path.suffix != '.qmd' or not path.is_file():
             raise ValueError('qmd must list existing authoritative .qmd files')
+    if builtin:
+        paths = [local_path(root, item) for item in qmd]
+        if len({p.parent for p in paths}) != 1 or not (paths[0].parent / '_quarto.yml').is_file():
+            raise ValueError('Builtin QMD must share one Quarto project directory')
+        if any(not re.fullmatch(r'[a-z0-9][a-z0-9_-]*', p.stem) for p in paths):
+            raise ValueError('Use simple lowercase QMD file stems')
     if not isinstance(config['instructions'], list):
         raise ValueError('instructions must be a list of private project instruction files')
     for item in config['instructions']:
@@ -100,8 +108,9 @@ def build_project(project='.', watch=False, profile=None):
     root, config = read_project(project)
     if profile is not None and not re.fullmatch(r'[A-Za-z0-9_][A-Za-z0-9_-]*', profile):
         raise ValueError('Use a simple Quarto profile name')
-    renderer = local_path(root, config['renderer'])
-    arguments = [str(renderer)]
+    builtin = config['renderer'] == 'builtin'
+    renderer = None if builtin else local_path(root, config['renderer'])
+    arguments = ['cv-buid builtin' if builtin else str(renderer)]
     if watch:
         arguments.append('--watch')
     if profile is not None:
@@ -118,6 +127,10 @@ def build_project(project='.', watch=False, profile=None):
         sys.argv = arguments
         sys.path.insert(0, str(root))
         try:
+            if builtin:
+                from .engine import run
+                sources = [local_path(root, item) for item in config['qmd']]
+                return run(root, sources[0].parent, [p.stem for p in sources], arguments[1:])
             runpy.run_path(str(renderer), run_name='__main__')
         except SystemExit as error:
             if error.code is None:

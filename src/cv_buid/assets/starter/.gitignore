@@ -1,0 +1,6 @@
+.cv-build/
+.cv-render.lock
+.cv-buid-upgrades/
+private/quarto/output/
+private/quarto/.quarto/
+__pycache__/
