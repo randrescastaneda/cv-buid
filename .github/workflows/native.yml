@@ -55,9 +55,7 @@ jobs:
       - run: quarto install tinytex --no-prompt
       - run: python scripts/ci_tools.py --tex-path
       - name: Configure declared TeX dependencies
-        run: |
-          tlmgr update --self
-          tlmgr install titlesec enumitem needspace psnfss helvetic
+        run: python scripts/ci_tex.py
       - name: Real installed-command acceptance, builtin and script backends
         run: python tests/check_starter.py --artifacts dist/native-evidence
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
