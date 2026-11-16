@@ -17,6 +17,7 @@ jobs:
           python-version: '3.13'
       - run: python scripts/ci_tools.py
       - run: python scripts/build_docs_preview.py
+      - run: python scripts/check_docs_preview.py
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: cv-buid-docs-preview
