@@ -2,6 +2,7 @@
 from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import unquote, urlsplit
 from build_docs_preview import Assets, PAGES, ROOT
 
 class Links(HTMLParser):
@@ -23,6 +24,13 @@ def main():
         for link in page.links:
             if link.startswith('#'):
                 assert link[1:] in page.ids, f'{name}: missing anchor {link}'
+            elif not urlsplit(link).scheme and not link.startswith('//'):
+                parsed = urlsplit(link)
+                target = root / unquote(parsed.path)
+                assert target.is_file(), f'{name}: missing local page {link}'
+                if parsed.fragment:
+                    destination = Links(); destination.feed(target.read_text())
+                    assert unquote(parsed.fragment) in destination.ids, f'{name}: missing target anchor {link}'
         if name == 'preview-all.html':
             for source in PAGES:
                 assert '#guide-'+source.removesuffix('.html') in page.links

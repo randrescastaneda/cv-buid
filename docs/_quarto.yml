@@ -8,6 +8,7 @@ project:
     - v1.qmd
 website:
   title: cv-buid
+  site-url: https://randrescastaneda.github.io/cv-buid/
   search: false
   favicon: favicon.svg
   navbar:

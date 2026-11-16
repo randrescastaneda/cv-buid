@@ -1,5 +1,7 @@
 # cv-buid
 
+[Documentation](https://randrescastaneda.github.io/cv-buid/) · [Quick start](https://randrescastaneda.github.io/cv-buid/quick-start.html)
+
 Local tools for private career evidence and QMD-first CV projects. Development version 0.2.0.dev0 extends the upstream v0.1.1 scaffold. It has
 no public package release. Python 3.11+ is required; JSON has no runtime dependencies.
 
