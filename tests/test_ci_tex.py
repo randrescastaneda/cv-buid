@@ -33,3 +33,9 @@ class TexMirrorFallback(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, 'All TeX mirror attempts failed'):
             ci_tex.configure(run)
         self.assertEqual(run.call_count, len(ci_tex.REPOSITORIES))
+
+    def test_resolved_windows_batch_path_is_used(self):
+        run = Mock()
+        executable = r'C:\TinyTeX\bin\windows\tlmgr.bat'
+        ci_tex.configure(run, executable=executable)
+        self.assertTrue(all(call.args[0][0] == executable for call in run.call_args_list))

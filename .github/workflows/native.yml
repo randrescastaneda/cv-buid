@@ -53,6 +53,8 @@ jobs:
           python -c "import pathlib,hashlib,subprocess,sys; p=pathlib.Path('dist/review-wheel'); w=next(p.glob('*.whl')); assert hashlib.sha256(w.read_bytes()).hexdigest()==(p/'SHA256SUMS').read_text().split()[0]; subprocess.run([sys.executable,'-m','pip','install','--no-deps',str(w)],check=True)"
       - run: python scripts/ci_tools.py
       - run: quarto install tinytex --no-prompt
+        env:
+          GH_TOKEN: ${{ github.token }}
       - run: python scripts/ci_tools.py --tex-path
       - name: Configure declared TeX dependencies
         run: python scripts/ci_tex.py
