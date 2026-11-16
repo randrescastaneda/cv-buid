@@ -1,0 +1,40 @@
+---
+lang: en
+execute:
+  enabled: false
+---
+
+::: {.cv-name custom-style="Title"}
+Alex Example
+:::
+
+::: {.cv-contact custom-style="CV Contact"}
+[alex@example.invalid](mailto:alex@example.invalid) | [Example website](https://example.org)
+:::
+
+# PROFILE
+
+This fictional profile demonstrates an editable QMD career document. Replace
+it with reviewed wording supported by your own evidence.
+
+# WORK EXPERIENCE
+
+::: {#entry-research-role .cv-entry}
+::: {.cv-employer custom-style="CV Employer"}
+Example Institute
+:::
+::: {.cv-career custom-style="CV Career"}
+Research Analyst [2020–2025]{.cv-date}
+:::
+- Built reproducible workflows for survey analysis.
+:::
+
+# SELECTED SOFTWARE
+
+Example tool ([2025](https://example.org))
+
+Synthetic demonstration entry; replace with evidence-backed work.
+
+# TECHNICAL SKILLS
+
+Python, R and reproducible research workflows. All starter claims are fictional.

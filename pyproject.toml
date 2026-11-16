@@ -1,13 +1,14 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools==80.9.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "cv-buid"
-version = "0.1.1"
+version = "0.2.0.dev0"
 description = "Local evidence-backed CV profiles, review diffs, and Quarto exports"
 requires-python = ">=3.11"
 license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
 dependencies = []
 
 [project.optional-dependencies]
@@ -18,3 +19,6 @@ cv-buid = "cv_buid.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+cv_buid = ["assets/*.md", "assets/starter/*", "assets/starter/.gitignore", "assets/starter/private/*", "assets/starter/private/quarto/*", "assets/starter/private/quarto/styles/*"]

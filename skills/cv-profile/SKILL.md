@@ -1,7 +1,27 @@
 ---
 name: cv-profile
-description: Import an existing CV into an evidence-backed private profile, interview the owner about gaps, review refresh diffs, and export selected CVs with cv-buid and Quarto.
+description: Maintain evidence-backed private career profiles and route CV or resume work through content, layout and final verification skills. Use for imports, refreshes, tailored selections and document revisions.
 ---
+
+## Outcome
+
+Maintain career evidence in one private profile and reviewed variant prose in
+authoritative QMD files. QMD content and format-specific presentation are separate inputs. Done means requested documents exist,
+their facts reconcile with evidence, and every final rendered page was checked.
+
+## Inputs and routing
+
+- Read [../cv-content/SKILL.md](../cv-content/SKILL.md) for importing facts,
+  rewriting prose, selecting a resume or full CV, and recording omissions.
+- Read [../cv-layout/SKILL.md](../cv-layout/SKILL.md) when formatting documents.
+- Read [../cv-qa/SKILL.md](../cv-qa/SKILL.md) before delivery.
+
+The toolkit keeps these reusable instructions in skills/. Adoption writes a
+standalone project skill inside the private repository; existing private
+instructions remain authoritative. Copy all four reusable skill folders together
+if installing them separately. Choose content/layout/QA by the requested work.
+
+## Profile workflow
 
 Use the installed `cv-buid` CLI. Keep the user's canonical profile and source
 evidence outside this package repository. Start from `examples/profile.json`
@@ -37,13 +57,31 @@ For refreshes, write a candidate profile separately and show
 replacing canonical facts. Select entries for opportunities; tailor wording
 within the supported evidence rather than expanding the claims.
 
-Run `cv-buid validate PROFILE`, then
-`cv-buid quarto PROFILE SELECTION --out PRIVATE/cv.qmd`.
-Render with `quarto render PRIVATE/cv.qmd --to pdf --no-execute`.
-`--style hyndman` requires the separately licensed Quarto Vitae extension.
-Compare extracted PDF text with selected entries and inspect every rendered
-page for clipping, glyph errors, and awkward page breaks. Do not promise ATS
-compatibility from appearance alone.
+For a new independent private repository, cv-buid init NEW_DIRECTORY creates
+fictional starter files and refuses existing directories. Replace all examples
+through the evidence/import/interview workflow before sharing a real CV. Builtin
+rendering uses the shared staged engine; existing script renderers remain valid.
+
+For an existing private repository, read its cv-buid.json and project instructions.
+Use cv-buid build --project PROJECT, optionally --watch, to run its reviewed
+local renderer. Config names evidence and authoritative QMD; it never selects
+or rewrites prose. The renderer owns actual input/output locations, style,
+locking and last-successful-output retention. Do not assume editing the metadata
+list relocates sources in a project-owned renderer.
+
+Adoption is explicit: cv-buid adopt PROJECT --renderer render.py
+--evidence-profile PRIVATE_PROFILE --qmd QMD (repeat --qmd for each variant).
+Preview with --dry-run. This creates config and a private project skill, never
+replaces AGENTS.md, and refuses existing adoption targets. Inspect unfamiliar
+renderer scripts before executing them. No global agent configuration changes.
+
+For a first migration only, the legacy quarto PROFILE SELECTION --out NEW.qmd
+may seed a new file. It refuses existing output; it is not a render step and
+must never regenerate reviewed QMD. Newer unreconciled local init-quarto/render
+commands are not part of this prototype. Do not use JSON-to-Word as a competing
+content source. PDF and optional Word derive from the same authoritative QMD;
+PDF presentation and DOCX reference files are independent. Verify the project's
+actual documented pipeline and every final page.
 
 The website is a destination for an explicit reviewed subset. Default to an
 empty public policy. `cv-buid public-export PROFILE POLICY --out STAGING.json`
@@ -51,3 +89,7 @@ exports only exact scalar fields. Entries also require `public: true` and a
 corroborated or confirmed status. The command never publishes. Review the
 export and website patch within the user's publication authorization.
 Creating a draft does not authorize messages, pushes, merges, or deployments.
+
+Plan upgrades with cv-buid upgrade --out PLAN.json, review the diff, then use
+apply-upgrade. Only config and recognized generated skills are eligible; preserve
+custom instructions and never treat QMD/evidence as upgrade targets.

@@ -1,0 +1,46 @@
+---
+title: Path to a usable v1
+---
+
+The development branch now includes a practical synthetic starter, a shared
+staged renderer, preserved script-backend compatibility, and guarded config/skill
+upgrades. It remains a review candidate, without a release or public deployment.
+
+## Implemented
+
+- `init` creates a new fictional workspace without overwriting existing files.
+- `build` and `build --watch` use builtin or reviewed script renderers.
+- Upgrade plans show diffs; application checks hashes, keeps backups and preserves
+  customized instructions. QMD, evidence and owner instructions are protected.
+- One checksummed wheel is installed in native Windows/macOS rendering CI.
+- Synthetic acceptance covers PDF/Word, save watching, failure retention, recovery,
+  lock exclusion and interruption of an active TeX process tree.
+- Private docs artifacts contain embedded HTML and a single-file guide, so preview
+  no longer depends on a localhost server on the reader's own device.
+
+## Verification {#verification}
+
+The expanded local suite has 28 passing tests. Real clean-installed macOS
+acceptance passed both backends using only fictional inputs. Native Windows and macOS rendering acceptance also passed both backends.
+Each final revision is checked by the PR's “Installed starter rendering”
+workflow; Python 3.11/3.13 unit CI is reported separately.
+
+Existing private CV wording, evidence and layout remain unchanged. Personal
+Calibri output is not inferred from the generic starter's free TeX-font tests.
+Word files are checked for content/package validity; Word application pagination
+is not certified by PDF checks.
+
+## Remaining before release
+
+1. Review the final native artifacts and application-level output behavior,
+   including opening generated Word files in Word. Native acceptance also
+   exercises actual Windows output/source sharing locks and recovery.
+2. Exercise an owner-led first-use interview/import and tailored selection against
+   real evidence, with explicit review of uncertainty. No autonomous collector.
+3. Extend guarded config/skill migration coverage across future released versions
+   and document a stable supported-version policy. Source-distribution clean
+   installation and starter smoke checks now run in CI.
+4. Review all packaging, template/font notices and docs accessibility; choose the
+   release version and authorize a release separately.
+
+The architecture does not need a service or database for this workflow.

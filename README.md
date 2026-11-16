@@ -1,57 +1,81 @@
 # cv-buid
 
-An offline Python package and agent workflow for evidence-backed CV profiles.
-This is a bounded first scaffold, not an autonomous fact collector.
+Local tools for private career evidence and QMD-first CV projects. Development version 0.2.0.dev0 extends the upstream v0.1.1 scaffold. It has
+no public package release. Python 3.11+ is required; JSON has no runtime dependencies.
 
-Install locally with `python3 -m pip install .`. Python 3.11+ is required;
-JSON needs no runtime dependencies. YAML is optional with `pip install .[yaml]`.
-Quarto, LaTeX, and `pdftotext` are external tools, used only when needed.
+Keep career facts/evidence, reviewed QMD, presentation files and custom agent
+instructions in your own private repository. The toolkit contains generic code,
+synthetic examples and reusable guidance only.
+
+## Start or connect a private workspace
+
+Install from the review wheel with its provided hash-checked requirements file,
+or from this checkout in a local virtual environment. See the
+[Quick start](docs/quick-start.qmd) for exact Mac and Windows commands.
 
 ```sh
-cv-buid inspect existing.tex --out /private/location/import
-cv-buid validate /private/location/profile.json
-cv-buid questions /private/location/profile.json
-cv-buid diff /private/location/current.json /private/location/candidate.json
-cv-buid quarto examples/profile.json examples/selection.json --out /tmp/cv.qmd
-quarto render /tmp/cv.qmd --to pdf --no-execute
-cv-buid public-export examples/profile.json examples/public-allowlist.json --out /tmp/public-profile.json
+cv-buid init /path/to/new-private-cv
+cv-buid build --project /path/to/new-private-cv
+cv-buid build --project /path/to/new-private-cv --watch
 ```
 
-Agent instructions are in [skills/cv-profile/SKILL.md](skills/cv-profile/SKILL.md).
-Copy that folder into an agent's skill directory when installing the workflow;
-the CLI itself is installed through pip. No global skill configuration is
-changed by this package.
+The new directory contains fictional Alex Example QMD and evidence, separate PDF
+and Word presentation, owner instructions and a project skill. Replace the
+fictional content before sharing anything. Init refuses an existing directory.
+The shared engine retains staged builds, stale-source checks, failure rollback,
+OS locking and child-process cleanup from the proven renderer. No font binaries
+or tools are installed by build. The starter uses TeX's Helvetica-compatible
+sans-serif family for PDF and an explicit Arial Word reference.
 
-`person`, ID-indexed `sources`, and ID-indexed `entries` live in one private
-canonical JSON or YAML file. Entries include `kind`, `fields`, `status`,
-`evidence`, and optional `public`. Evidence names a source and a locator.
-Selections list IDs in section order, independently of the profile and design.
-Proposed entries are excluded by default. For an explicitly requested review
-draft, `quarto --review-candidates` labels each proposed entry as awaiting owner
-review without changing its status. Conflicts remain blocked in either mode,
-and the public export rules remain unchanged.
-The schema is deliberately small and currently validated by Python rather than
-a published JSON Schema. Field-level provenance, deduplication across research
-versions, and an interactive interview are follow-up work.
+For an existing project, preserve its renderer and reviewed content:
 
-The import command preserves and hashes local bytes but only extracts text.
-An agent performs the semantic import and records missing evidence. Refreshes
-are candidate profiles and deterministic diffs; there is no automatic approval,
-network sync, scheduler, or publication.
+```sh
+cv-buid adopt /path/to/private-project --renderer render.py --evidence-profile private/profile.json --qmd private/quarto/resume.qmd --qmd private/quarto/full-cv.qmd --dry-run
+```
 
-Public exports require exact scalar JSON pointers. No object, wildcard,
-source, note, or review-context exports are accepted. A publishable entry needs
-an explicit public flag and corroborated or confirmed status. Keep policies
-empty until the owner reviews their contents. Export is staging only; the
-website adapter and publication step are intentionally separate.
+Review the plan and repeat without --dry-run. Only config and a generated project
+skill are added; existing targets are refused. Existing AGENTS.md and QMD are
+never overwritten. Script renderers keep their existing layout and output rules.
+With renderer=builtin, the config's QMD list selects variants in one Quarto project.
 
-The plain adapter delegates typography to Quarto. The `hyndman` adapter emits
-the shared Quarto Vitae entry syntax; install its extension separately.
-Do not assume MIT covers templates: Quarto Vitae Hyndman is CC BY-SA 4.0,
-and other templates have their own terms. No template is bundled in this
-package. RenderCV is an alternate YAML/PDF backend with an MIT-licensed CLI
-and an official agent skill; no RenderCV adapter is implemented yet.
+## Reviewable upgrades
 
-Run checks with `PYTHONPATH=src python3 -m unittest discover -s tests -v`.
-All packaged examples and tests use synthetic identities. Keep real data,
-imports, generated CVs, and credentials out of package history.
+```sh
+cv-buid upgrade --project /path/to/private-project --out upgrade-plan.json
+cv-buid apply-upgrade upgrade-plan.json --project /path/to/private-project
+```
+
+Read the plan's diff first. An optional --candidate JSON file proposes config
+changes. Application checks original hashes again, keeps backups, and rolls back
+on failure. Customized skills are reported for manual review and are not replaced.
+QMD, evidence and owner AGENTS.md are never upgrade targets. See
+[Project contract](docs/project-contract.qmd) and [release preparation](docs/release-preparation.md).
+
+## Evidence and agents
+
+The private profile supports facts, evidence and review status. Each QMD owns
+its variant's reviewed wording, selection and order. Render never regenerates
+QMD from historical JSON selections. PDF is primary; optional Word derives from
+the same QMD using separate format-specific presentation.
+
+The [profile router](skills/cv-profile/SKILL.md) routes content, layout and QA.
+Private project instructions take precedence. Proposed refreshes remain diffs;
+sources do not approve achievements. `inspect`, `validate`, `questions`, `diff`
+and `public-export` remain available. Public export is explicit allowlisted
+staging, never automatic publication. The legacy `quarto` command can seed only
+a new draft path and refuses existing files; do not use it on reviewed sources.
+
+Run synthetic package tests with
+`PYTHONPATH=src python3 -m unittest discover -s tests -v`. Self-contained installed-command acceptance is in tests/check_starter.py and
+runs against the same checksummed wheel on native macOS and Windows CI.
+
+
+## Documentation preview
+
+The repository now includes a Quarto documentation site in docs/. Build it with
+`quarto render docs --to html --no-execute`; preview locally with
+`quarto preview docs --host 127.0.0.1 --no-browser`. Generated docs/_site and Quarto caches are ignored. Private PR artifacts contain
+a single-file, script-free docs guide plus the interactive HTML pages. Extract
+the artifact and open preview-all.html; no localhost server is needed. No public
+hosting or deployment workflow is enabled.
+See [Quick start](docs/quick-start.qmd) and [Path to v1](docs/v1.qmd).

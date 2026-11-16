@@ -223,6 +223,18 @@ def main(argv=None):
     p = sub.add_parser("diff"); p.add_argument("before"); p.add_argument("after")
     p = sub.add_parser("quarto"); p.add_argument("profile"); p.add_argument("selection"); p.add_argument("--out", required=True); p.add_argument("--style", choices=["plain", "hyndman"], default="plain"); p.add_argument("--review-candidates", action="store_true", help="Include proposed entries with visible owner-review labels; conflicts remain blocked")
     p = sub.add_parser("public-export"); p.add_argument("profile"); p.add_argument("policy"); p.add_argument("--out", required=True)
+    p = sub.add_parser("adopt", help="Add project config and a private agent skill without replacing existing files")
+    p.add_argument("project", nargs="?", default="."); p.add_argument("--renderer", default="render.py")
+    p.add_argument("--evidence-profile", required=True); p.add_argument("--qmd", action="append", required=True)
+    p.add_argument("--instructions", action="append"); p.add_argument("--dry-run", action="store_true")
+    p = sub.add_parser("build", help="Run the configured reviewed project renderer without regenerating QMD")
+    p.add_argument("--project", default="."); p.add_argument("--watch", action="store_true"); p.add_argument("--profile")
+    p = sub.add_parser("init", help="Create a new synthetic private QMD workspace")
+    p.add_argument("directory")
+    p = sub.add_parser("upgrade", help="Create a reviewable config/generated-skill upgrade plan")
+    p.add_argument("--project", default="."); p.add_argument("--candidate"); p.add_argument("--out", required=True)
+    p = sub.add_parser("apply-upgrade", help="Apply an unchanged reviewed plan with backups")
+    p.add_argument("plan"); p.add_argument("--project", default="."); p.add_argument("--backup-directory")
     args = parser.parse_args(argv)
     try:
         if args.command == "inspect":
@@ -234,12 +246,37 @@ def main(argv=None):
         elif args.command == "diff":
             print("".join(difflib.unified_diff(canonical(load(args.before)), canonical(load(args.after)), fromfile=args.before, tofile=args.after)), end="")
         elif args.command == "quarto":
-            write(args.out, quarto(load(args.profile), load(args.selection), args.style, args.review_candidates))
+            target = Path(args.out)
+            if target.exists() or target.is_symlink():
+                raise ValueError("Output QMD exists; edit it directly or choose a new draft path")
+            content = quarto(load(args.profile), load(args.selection), args.style, args.review_candidates)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            with target.open("x", encoding="utf-8") as stream:
+                stream.write(content)
+        elif args.command == "upgrade":
+            from .upgrade import plan_upgrade
+            plan = plan_upgrade(args.project, args.candidate)
+            with Path(args.out).open("x", encoding="utf-8") as stream:
+                json.dump(plan, stream, indent=2); stream.write("\n")
+            print(json.dumps(plan, indent=2))
+        elif args.command == "apply-upgrade":
+            from .upgrade import apply_upgrade
+            print(json.dumps(apply_upgrade(args.project, load(args.plan), args.backup_directory), indent=2))
+        elif args.command == "init":
+            from .starter import init_project
+            print(init_project(args.directory))
+        elif args.command == "adopt":
+            from .project import adopt_project
+            print(json.dumps(adopt_project(args.project, args.renderer, args.evidence_profile,
+                                           args.qmd, args.instructions, args.dry_run), indent=2))
+        elif args.command == "build":
+            from .project import build_project
+            return build_project(args.project, args.watch, args.profile)
         elif args.command == "public-export":
             write(args.out, json.dumps(public_export(load(args.profile), load(args.policy)), ensure_ascii=False, indent=2) + "\n")
-    except (ValueError, KeyError, TypeError, OSError, ImportError, subprocess.CalledProcessError) as exc:
+    except (ValueError, KeyError, TypeError, OSError, ImportError, RuntimeError, subprocess.CalledProcessError) as exc:
         parser.exit(2, f"cv-buid: {exc}\n")
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

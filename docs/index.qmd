@@ -1,0 +1,73 @@
+---
+title: ""
+toc: false
+---
+
+::: {.hero-grid}
+::: {.hero}
+::: {.eyebrow}
+Development preview · 0.2.0.dev0
+:::
+
+# Your CV stays in your repository.
+
+::: {.lead}
+Keep career evidence, reviewed Quarto documents and your agent instructions
+together in a private workspace. Use cv-buid to start that workspace or connect its existing renderer, with
+deliberate edits and reviewable changes.
+:::
+
+::: {.hero-actions}
+[Get started →](quick-start.qmd){.action-link}
+[Explore the project contract](project-contract.qmd){.secondary-link}
+:::
+:::
+
+```{=html}
+<div class="document-art" aria-hidden="true"><div class="paper"><div class="paper-label">YOUR PRIVATE WORKSPACE</div><div class="paper-title">A career, clearly<br>documented.</div><div class="paper-line"></div><div class="paper-line short"></div><div class="paper-rule"></div><div class="paper-label">EVIDENCE → REVIEW → RENDER</div><div class="paper-line"></div><div class="paper-line"></div><div class="paper-line short"></div><div class="paper-bottom">One source. Thoughtful presentation.</div></div></div>
+```
+:::
+
+::: {.callout-note title="What works today"}
+Start a new fictional workspace with `cv-buid init`, or adopt an existing
+project without replacing reviewed content. The toolkit supplies a shared staged
+renderer and reviewable config/skill upgrades. No tools or fonts are installed
+by a build. Replace all starter examples before sharing a real CV.
+:::
+
+## A clear home for each source
+
+::: {.ownership}
+**Private profile** — career facts, evidence and review status.
+
+**Reviewed QMD** — each résumé or CV's wording, selection and order.
+
+**Presentation files** — Quarto settings, PDF styling and the optional Word reference.
+
+**Project instructions** — your preferences and authority over the agent workflow.
+:::
+
+## Small commands, familiar rendering
+
+After installation and adoption, from your private project:
+
+```sh
+cv-buid build
+cv-buid build --watch
+```
+
+The configured shared engine or reviewed project renderer owns output paths,
+fonts, locking and recovery behavior.
+Your existing direct rendering command remains available. QMD is never regenerated
+from historical JSON selections during a build.
+
+## Review before sharing
+
+Agents can inspect sources, propose evidence updates and show diffs. The owner
+resolves uncertainty and approves factual changes. PDF and optional Word derive
+from the same QMD, with separate presentation files and potentially different
+pagination. Public exports use explicit field allowlists and remain staging files.
+
+CI tests installed-command rendering using fictional workspaces on Windows and
+macOS. Unit and real rendering results are recorded separately; see the
+[current verification boundary](v1.qmd#verification).

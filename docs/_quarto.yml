@@ -1,0 +1,35 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+    - quick-start.qmd
+    - project-contract.qmd
+    - v1.qmd
+website:
+  title: cv-buid
+  search: false
+  favicon: favicon.svg
+  navbar:
+    title: cv-buid
+    left:
+      - href: index.qmd
+        text: Overview
+      - href: quick-start.qmd
+        text: Quick start
+      - href: project-contract.qmd
+        text: Project contract
+      - href: v1.qmd
+        text: Path to v1
+  page-footer: cv-buid · Private workspaces. Deliberate edits. · Development preview
+format:
+  html:
+    theme: [default, styles.scss]
+    css: styles.css
+    toc: true
+    code-copy: true
+    embed-resources: true
+    code-overflow: wrap
+    lang: en
+execute:
+  enabled: false
