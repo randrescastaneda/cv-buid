@@ -13,16 +13,19 @@ website:
   navbar:
     title: cv-buid
     left:
+      - href: index.qmd
+        text: Overview
       - href: quick-start.qmd
         text: Quick start
       - href: project-contract.qmd
         text: Project contract
       - href: v1.qmd
         text: Path to v1
-  page-footer: Development documentation · Local preview · No publishing workflow
+  page-footer: cv-buid · Private workspaces. Deliberate edits. · Development preview
 format:
   html:
     theme: [default, styles.scss]
+    css: styles.css
     toc: true
     code-copy: true
     embed-resources: true

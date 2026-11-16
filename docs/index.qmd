@@ -3,6 +3,7 @@ title: ""
 toc: false
 ---
 
+::: {.hero-grid}
 ::: {.hero}
 ::: {.eyebrow}
 Development preview · 0.2.0.dev0
@@ -16,7 +17,15 @@ together in a private workspace. Use cv-buid to start that workspace or connect 
 deliberate edits and reviewable changes.
 :::
 
-[Connect an existing project](quick-start.qmd){.action-link}
+::: {.hero-actions}
+[Get started →](quick-start.qmd){.action-link}
+[Explore the project contract](project-contract.qmd){.secondary-link}
+:::
+:::
+
+```{=html}
+<div class="document-art" aria-hidden="true"><div class="paper"><div class="paper-label">YOUR PRIVATE WORKSPACE</div><div class="paper-title">A career, clearly<br>documented.</div><div class="paper-line"></div><div class="paper-line short"></div><div class="paper-rule"></div><div class="paper-label">EVIDENCE → REVIEW → RENDER</div><div class="paper-line"></div><div class="paper-line"></div><div class="paper-line short"></div><div class="paper-bottom">One source. Thoughtful presentation.</div></div></div>
+```
 :::
 
 ::: {.callout-note title="What works today"}
